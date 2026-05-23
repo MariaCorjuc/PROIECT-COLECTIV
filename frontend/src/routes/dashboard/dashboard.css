@@ -1,0 +1,238 @@
+.main-container {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.app-window {
+  display: flex;
+  width: 95vw;
+  height: 92vh;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 24px;
+  box-shadow: 0 30px 70px rgba(12, 50, 43, 0.08);
+  overflow: hidden;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 280px;
+  background: rgba(255, 255, 255, 0.25);
+  border-right: 1px solid rgba(0, 117, 119, 0.1);
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* REZOLVARE: Logo text simplu, gri stins discret, nu mai este buton, nu se mai aprinde cu verde */
+.sidebar-logo {
+  font-size: 19px;
+  font-weight: 700;
+  color: rgba(11, 60, 51, 0.45);
+  padding: 5px 0 25px 10px;
+  letter-spacing: -0.4px;
+  user-select: none;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: rgba(11, 60, 51, 0.5);
+  margin-top: 14px;
+  margin-bottom: 6px;
+  padding-left: 10px;
+  letter-spacing: 0.5px;
+}
+
+/* Butoanele din meniu */
+.nav-btn {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0b3c33;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover {
+  background: rgba(0, 117, 119, 0.06);
+  color: #007577;
+}
+
+.nav-btn.active {
+  background: linear-gradient(135deg, #007577, #376d61);
+  color: white;
+}
+
+/* Distanțare specială pentru butonul Home de sus */
+.home-btn {
+  margin-bottom: 5px;
+}
+
+/* CONTINUT CONTENT DREAPTA */
+.content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+}
+
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.page-context-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(11, 60, 51, 0.6);
+}
+
+.user-profile-widget {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 6px 14px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0b3c33;
+}
+
+.user-role {
+  font-size: 11px;
+  color: rgba(11, 60, 51, 0.6);
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #e2e4f7;
+  border: 2px solid #007577;
+}
+
+.dynamic-content {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  padding: 30px;
+}
+
+/* HOME LAYOUT (Caseta + Leaderboard) */
+.dashboard-home-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 30px;
+  height: 100%;
+}
+
+.welcome-box h2 {
+  color: #007577;
+  margin-top: 0;
+  font-size: 24px;
+}
+
+.welcome-box p {
+  color: #0b3c33;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+/* LEADERBOARD CHENAR */
+.content-leaderboard {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid rgba(0, 117, 119, 0.1);
+  box-shadow: 0 10px 30px rgba(11, 60, 51, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.leaderboard-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #007577;
+  margin-bottom: 15px;
+  letter-spacing: 0.2px;
+}
+
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.leaderboard-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #0b3c33;
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: transform 0.2s;
+}
+
+.leaderboard-row:hover {
+  transform: translateX(2px);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.leaderboard-row .rank {
+  font-weight: 700;
+  color: #007577;
+  width: 30px;
+}
+
+.leaderboard-row .name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.leaderboard-row .points {
+  font-weight: 700;
+  color: #376d61;
+  font-size: 13px;
+}
+
+.leaderboard-row.current-user {
+  background: linear-gradient(135deg, rgba(0, 117, 119, 0.1), rgba(46, 230, 184, 0.05));
+  font-weight: 700;
+  border: 1px solid rgba(0, 117, 119, 0.2);
+}
