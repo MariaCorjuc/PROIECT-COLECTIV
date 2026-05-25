@@ -1,3 +1,33 @@
+<script lang="ts">
+  import { onMount, onDestroy } from 'svelte';
+  
+  let containerReact: HTMLDivElement | undefined = undefined; 
+  let rootReact: any = null; 
+
+  onMount(async () => {
+    const React = (await import('react')).default;
+    const { createRoot } = await import('react-dom/client');
+    
+    try {
+      // Importăm componenta care conține doar butoanele și canvas-ul de React Flow
+      const DFSVisualizer = ((await import('$lib/components/DFSVisualizer.jsx')) as any).default;
+
+      if (containerReact) {
+        rootReact = createRoot(containerReact);
+        rootReact.render(React.createElement(DFSVisualizer));
+      }
+    } catch (err) {
+      console.error("Eroare la încărcarea React Flow:", err);
+    }
+  });
+
+  onDestroy(() => {
+    if (rootReact && typeof rootReact.unmount === 'function') {
+      rootReact.unmount();
+    }
+  });
+</script>
+
 <div class="pagina-container">
    <div class="textAlgoritm">Depth-First Search (DFS)</div>
 
@@ -8,16 +38,17 @@
          sunt întotdeauna alese în ordine alfabetică pentru a fi adăugate pe stivă/expandate.
       </div>
 
-      <img src="/poze/harta.png" alt="Graful problemei DFS" class="poza-graf">
+      <img src="/poze/harta.png" alt="Graful problemei A*" class="poza-graf">
    </div>
+
+   <div class="zona-arbore-jos" bind:this={containerReact}></div>
 </div>
 
 <style>
   .pagina-container {
-     width: 100%; /* Folosește 100% din spațiul oferit de chenarul din layout */
+     width: 100%;
      box-sizing: border-box;
      padding-top: 20px;
-     /* MODIFICARE: Am scos margin-left: 360px și max-width ca să nu se mai strângă conținutul */
   }
 
   .textAlgoritm {
@@ -30,7 +61,6 @@
      justify-content: center;
      padding-top: 10px;
      margin: 0 0 30px 0;
-     /* MODIFICARE: Am scos margin-left: 300px ca titlul să stea fix pe centrul chenarului */
   }
   
   .textProblema {
@@ -40,21 +70,31 @@
      font-size: 20px;
      line-height: 1.6;
      text-align: justify;
-     flex: 1; /* Permite textului să ocupe flexibil partea stângă */
-     max-width: 500px; /* Oprește textul din a strivi imaginea din dreapta */
+     flex: 1;
+     max-width: 500px;
   }
-     
+      
   .container-cerinta {
      width: 100%;
      display: flex;
      align-items: center;
-     justify-content: space-between; /* Împinge curat textul în stânga și poza în dreapta */
-     gap: 40px; /* Spațiu egal și aerisit între ele */
+     justify-content: space-between;
+     gap: 40px;
+     margin-bottom: 40px; /* Adăugăm spațiu între partea de sus și arborele de jos */
   }
 
   .poza-graf {
-     max-width: 55%; /* Ocupă maxim 55% din lățimea ferestrei de lucru */
-     height: auto; /* MODIFICARE: Schimbat din 300px fix în auto pentru ca harta să nu mai apară deformată sau turtită */
+     max-width: 55%;
+     height: auto;
      border-radius: 12px;
+  }
+
+  /* Stil nou pentru zona de jos, care va sta sub text și imagine */
+  .zona-arbore-jos {
+     width: 100%;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     box-sizing: border-box;
   }
 </style>
