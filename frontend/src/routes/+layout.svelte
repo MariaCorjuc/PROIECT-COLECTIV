@@ -2,13 +2,24 @@
     import favicon from '$lib/assets/favicon.svg';
     import { page } from '$app/state';
     import { goto } from '$app/navigation';
+    import { onMount } from 'svelte';
 
     let { children } = $props();
 
     let userProfile = $state({
-        name: 'Andrei Popescu',
+        name: 'User',
         role: 'Student',
-        avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Andrei'
+        avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=User'
+    });
+
+    onMount(() => {
+        const name = localStorage.getItem('name') || 'User';
+
+        userProfile = {
+            name,
+            role: 'Student',
+            avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=' + name
+        };
     });
 
     const isActive = (path: string) => page.url.pathname === path;
@@ -16,6 +27,7 @@
 
     function handleLogout() {
         localStorage.removeItem('token');
+        localStorage.removeItem('name');
         goto('/');
     }
 </script>

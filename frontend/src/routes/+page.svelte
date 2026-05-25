@@ -5,14 +5,16 @@
   let isLogin = $state(true); 
   let email = $state('');
   let password = $state('');
+  let name = $state(''); // ✅ ADAUGAT DOAR ASTA
+
   let errorMessage = $state('');
-  let successMessage = $state(''); // Cameră nouă pentru mesajul verde de succes
+  let successMessage = $state('');
   let loading = $state(false);
 
   async function handleSubmit(event: SubmitEvent) {
     event.preventDefault();
     errorMessage = '';
-    successMessage = ''; // Resetăm mesajele la fiecare trimitere
+    successMessage = '';
     loading = true;
 
     try {
@@ -28,7 +30,10 @@
         if (contentType && contentType.includes("application/json")) {
           const data = await response.json();
           if (!response.ok) throw new Error(data.message || 'Email sau parolă incorectă!');
+
           localStorage.setItem('token', data.token);
+          if (data.name) localStorage.setItem('name', data.name); // ✅ ADAUGAT
+
           window.location.href = '/dashboard';
         } else {
           const textError = await response.text();
@@ -40,7 +45,7 @@
         const response = await fetch('http://localhost:8080/api/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
+          body: JSON.stringify({ email, password, name }) // ✅ ADAUGAT NAME
         });
 
         const contentType = response.headers.get("content-type");
@@ -51,10 +56,10 @@
             throw new Error(data.message || 'Eroare la crearea contului.');
           }
 
-          // REZOLVARE: Fără alert() de sus! Punem mesajul direct în pagină
           successMessage = 'Contul a fost creat cu succes! Te poți autentifica acum.';
-          isLogin = true; // Îl mutăm direct pe Login
-          password = '';  // Curățăm câmpul parolei
+          isLogin = true;
+          password = '';
+          name = ''; // reset
         } else {
           const textError = await response.text();
           throw new Error(textError || 'Eroare la crearea contului pe server.');
@@ -90,6 +95,7 @@
     {/if}
 
     <form onsubmit={handleSubmit}>
+      
       <div class="field">
         <label for="reg-email">Email</label>
         <input id="reg-email" type="email" bind:value={email} placeholder="nume@exemplu.com" required />
@@ -99,6 +105,13 @@
         <label for="reg-password">Parolă</label>
         <input id="reg-password" type="password" bind:value={password} placeholder="••••••••" required />
       </div>
+
+      {#if !isLogin} <!-- ✅ DOAR LA REGISTER -->
+        <div class="field">
+          <label for="reg-name">Nume</label>
+          <input id="reg-name" type="text" bind:value={name} placeholder="Numele tău" required />
+        </div>
+      {/if}
 
       <button type="submit" disabled={loading}>
         {loading ? 'Se procesează...' : (isLogin ? 'Autentificare' : 'Creează Cont')}
