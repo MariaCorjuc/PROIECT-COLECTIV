@@ -33,7 +33,7 @@
 
    <div class="container-cerinta">
       <div class="textProblema">
-         În această problemă starea de start este Bucuresti, iar starea obiectiv este Sighisoara.
+         În această problemă starea de start este Arad, iar starea obiectiv este Bucuresti.
          Algoritmul explorează graful în adâncime. Să presupunem că legăturile (nodurile vecine) 
          sunt întotdeauna alese în ordine alfabetică pentru a fi adăugate pe stivă/expandate.
       </div>

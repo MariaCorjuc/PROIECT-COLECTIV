@@ -63,12 +63,17 @@
                     <button class="nav-btn" class:active={isAlgoActive('DFS')} onclick={() => goto('/dashboard/DFS')}>Depth First Search</button>
                     <button class="nav-btn" class:active={isAlgoActive('A')} onclick={() => goto('/dashboard/A')}>A* Search</button>
                     <button class="nav-btn" class:active={isAlgoActive('UCS')} onclick={() => goto('/dashboard/UCS')}>
+
                         Uniform Cost Search
                     </button>
+                    <button class="nav-btn" class:active={isAlgoActive('Minimax')} onclick={() => goto('/dashboard/Minimax')}>Minimax</button>
+                    <button class="nav-btn" class:active={isAlgoActive('Expectimax')} onclick={() => goto('/dashboard/Expectimax')}>Expectimax</button>
+                    <button class="nav-btn" class:active={isAlgoActive('RecursiveBFS')} onclick={() => goto('/dashboard/RecursiveBFS')}>Recursive Best First Search</button>
+                    <button class="nav-btn" class:active={isAlgoActive('IDA')} onclick={() => goto('/dashboard/IDA')}>Iterative Deepening A* Search</button>
+
                     
                     <span class="section-title">Altele</span>
                     <button class="nav-btn" class:active={isActive('/profile')} onclick={() => goto('/profile')}>Profilul Meu</button>
-                    <button class="nav-btn" class:active={isActive('/settings')} onclick={() => goto('/settings')}>Setări</button>
                 </nav>
 
                 <div class="sidebar-spacer"></div>
@@ -185,7 +190,7 @@
     .nav-menu {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 2px;
     }
 
     .section-title {
