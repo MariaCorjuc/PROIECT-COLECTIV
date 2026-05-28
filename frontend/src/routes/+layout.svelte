@@ -60,6 +60,7 @@
 
                     <span class="section-title">Algoritmi</span>
                     <button class="nav-btn" class:active={isAlgoActive('BFS')} onclick={() => goto('/dashboard/BFS')}>Breadth First Search</button>
+                    <button class="nav-btn" class:active={isAlgoActive('BFS')} onclick={() => goto('/dashboard/MINIMAX')}>Mini-max</button>
                     <button class="nav-btn" class:active={isAlgoActive('DFS')} onclick={() => goto('/dashboard/DFS')}>Depth First Search</button>
                     <button class="nav-btn" class:active={isAlgoActive('A')} onclick={() => goto('/dashboard/A')}>A* Search</button>
                     <button class="nav-btn" class:active={isAlgoActive('UCS')} onclick={() => goto('/dashboard/UCS')}>
