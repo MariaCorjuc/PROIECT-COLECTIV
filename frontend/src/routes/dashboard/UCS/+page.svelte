@@ -1,9 +1,87 @@
+<script>
+  import { onMount } from 'svelte';
+  import { monteazaArbore } from './Arbore.js';
+  import { istoricPasi } from './dateArbore.js'
+
+/** @type {HTMLDivElement | undefined} */
+  let containerArbore = undefined;
+
+/** @type {HTMLDivElement | undefined} */
+
+  let zonaGraf=undefined; 
+
+
+  /** @type {number}*/
+   let pasCurent=0;
+
+  /** @type {any} */
+  let cronometru = null;
+
+  function actualizeazaEcran(){
+
+      if(zonaGraf)
+      {
+         const datePasCurent=istoricPasi[pasCurent];
+         monteazaArbore(zonaGraf,datePasCurent.noduri,datePasCurent.muchii);
+      }
+  }
+
+  function pornesteAnimatia(){
+   //daca ruleaza nu facem nimic
+   if(cronometru) return;
+
+   cronometru=setInterval( () => {
+         if(pasCurent<istoricPasi.length-1)
+         {
+            pasCurent+=1;
+            actualizeazaEcran();
+         }else{
+            opresteAnimatia();
+         }
+   
+   }   ,1500);
+  }
+
+  function opresteAnimatia(){
+   clearInterval(cronometru);
+   cronometru=null;
+  }
+
+
+function restartAnimatia(){
+   opresteAnimatia();
+   pasCurent=0;
+   actualizeazaEcran();
+}
+
+function fullScreen(){
+   if(containerArbore){
+      if(!document.fullscreenElement){
+         containerArbore.requestFullscreen().then(() =>{
+            setTimeout(actualizeazaEcran,300);
+         }).catch(err=>{
+            console.error('Eroare la activarea Fullscreen: ${err.message}');
+         });
+      }
+      else{
+         document.exitFullscreen();
+         setTimeout(actualizeazaEcran,300);
+      }
+      
+      }
+   }
+
+  onMount(() => {
+      actualizeazaEcran();
+  });
+</script>
+
 <div class="pagina-container">
 <div class="textAlgoritm">Uniform Cost</div>
 
    <div class="container-cerinta">
 
-         <div class="textProblema">În această problemă starea de start este Bucuresti, iar starea obiectiv este Sighisoara.
+         <div class="textProblema">În această problemă starea de start este Arad, iar starea obiectiv este Bucuresti.
          Costurile de tranziție sunt scrise pe muchii, iar estimarea euristică, h, a distanței de la start
          la obiectiv este scrisă în nod. Să presupunem că legăturile sunt întotdeauna rupte prin
          alegerea stării care urmează mai întâi în ordine alfabetică.
@@ -11,14 +89,25 @@
 
          <img src="/poze/harta.png" alt="Graful problemei UCS" class="poza-graf">
       </div>
+
+   <div bind:this={containerArbore} class="container-aplicatie-fullscreen" >
+   
+      <div class="container-butoane">
+      <button class="btn-nav" onclick={pornesteAnimatia}>▶ Play</button>
+      <button class="btn-nav" onclick={opresteAnimatia}>⏸ Pause</button>
+      <button class="btn-nav" onclick={restartAnimatia}>Restart</button>
+      <button class="btn-nav" onclick={fullScreen}>⛶</button>
+   </div>
+      <div bind:this={zonaGraf} class="container-zonaGraf"></div>
+ 
+</div>
 </div>
 
 <style>
   .pagina-container {
-     width: 100%; /* Folosește 100% din spațiul oferit de chenarul din layout */
+     width: 100%; 
      box-sizing: border-box;
      padding-top: 20px;
-     /* MODIFICARE: Am scos margin-left: 360px și max-width ca să nu se mai strângă conținutul */
   }
 
   .textAlgoritm {
@@ -31,7 +120,6 @@
      justify-content: center;
      padding-top: 10px;
      margin: 0 0 30px 0;
-     /* MODIFICARE: Am scos margin-left: 300px ca titlul să stea fix pe centrul chenarului */
   }
   
   .textProblema {
@@ -41,21 +129,82 @@
      font-size: 20px;
      line-height: 1.6;
      text-align: justify;
-     flex: 1; /* Permite textului să ocupe flexibil partea stângă */
-     max-width: 500px; /* Oprește textul din a strivi imaginea din dreapta */
+     flex: 1;
+     max-width: 500px; 
   }
      
   .container-cerinta {
      width: 100%;
      display: flex;
      align-items: center;
-     justify-content: space-between; /* Împinge curat textul în stânga și poza în dreapta */
-     gap: 40px; /* Spațiu egal și aerisit între ele */
+     justify-content: space-between; 
+     gap: 40px; 
   }
 
   .poza-graf {
-     max-width: 55%; /* Ocupă maxim 55% din lățimea ferestrei de lucru */
-     height: auto; /* MODIFICARE: Schimbat din 300px fix în auto pentru ca harta să nu mai apară deformată sau turtită */
+     max-width: 55%; 
+     height: auto; 
      border-radius: 12px;
   }
+
+  .container-butoane{
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 40px 0;
+      width: 100%;
+      background: transparent;
+
+  }
+
+   .btn-nav{
+        background: #0A7E8C;
+        border: none;
+        text-align: center;
+        padding: 12px 45px;
+        font-size: 25px;
+        font-weight: 800px;
+        color: white;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    div:fullscreen{
+      width: 100vw !important;
+      height: 100vh !important;
+      box-sizing: border-box;
+      margin: 0 !important;
+      padding: 20px 20px 100px !important;
+        background-color: #dae9eb !important; 
+        background-image: 
+            radial-gradient(at 0% 0%, rgba(169, 209, 215, 0.6) 0px, transparent 50%),  
+            radial-gradient(at 100% 0%, rgba(218, 185, 252, 0.5) 0px, transparent 50%),
+            radial-gradient(at 100% 100%, rgba(10, 126, 140, 0.15) 0px, transparent 50%) !important;
+    }
+
+    div:fullscreen .container-butoane{
+      position: absolute !important;
+      bottom: 30px !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      z-index: 100 !important;
+    }
+
+    .container-aplicatie-fullscreen{
+      position: relative; 
+      width: 100%;
+      height: 500px;
+    }
+    
+    .container-zonaGraf{
+      width:100%;
+      height: 450px;
+    }
+
+    div:fullscreen .container-zonaGraf{
+      width: 100% !important;
+      height:100% !important;
+      transform: translateY(-80px) !important;
+    }
 </style>
