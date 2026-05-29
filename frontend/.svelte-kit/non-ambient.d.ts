@@ -29,7 +29,7 @@ declare module "$app/types" {
 	type MatcherParam<M> = M extends (param : string) => param is (infer U extends string) ? U : string;
 
 	export interface AppTypes {
-		RouteId(): "/" | "/dashboard" | "/dashboard/A" | "/dashboard/BFS" | "/dashboard/DFS" | "/dashboard/UCS" | "/login";
+		RouteId(): "/" | "/dashboard" | "/dashboard/A" | "/dashboard/BFS" | "/dashboard/DFS" | "/dashboard/Expectimax" | "/dashboard/IDA" | "/dashboard/Minimax" | "/dashboard/RecursiveBFS" | "/dashboard/UCS" | "/login";
 		RouteParams(): {
 			
 		};
@@ -39,6 +39,10 @@ declare module "$app/types" {
 			"/dashboard/A": Record<string, never>;
 			"/dashboard/BFS": Record<string, never>;
 			"/dashboard/DFS": Record<string, never>;
+			"/dashboard/Expectimax": Record<string, never>;
+			"/dashboard/IDA": Record<string, never>;
+			"/dashboard/Minimax": Record<string, never>;
+			"/dashboard/RecursiveBFS": Record<string, never>;
 			"/dashboard/UCS": Record<string, never>;
 			"/login": Record<string, never>
 		};
