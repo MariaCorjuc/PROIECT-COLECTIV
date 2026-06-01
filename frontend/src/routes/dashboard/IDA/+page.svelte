@@ -86,7 +86,7 @@ function fullScreen(){
          alegerea stării care urmează mai întâi în ordine alfabetică.
          </div>
 
-         <img src="/poze/harta_cu_h.png" alt="Graful problemei IDA*" class="poza-graf">
+         <img src="/poze/harta+euristica.png" alt="Graful problemei IDA*" class="poza-graf">
       </div>
 
    <div bind:this={containerArbore} class="container-aplicatie-fullscreen" >

@@ -10,7 +10,8 @@ export const nodes = [
 	() => import('./nodes/6'),
 	() => import('./nodes/7'),
 	() => import('./nodes/8'),
-	() => import('./nodes/9')
+	() => import('./nodes/9'),
+	() => import('./nodes/10')
 ];
 
 export const server_loads = [];
@@ -21,9 +22,10 @@ export const dictionary = {
 		"/dashboard/A": [4],
 		"/dashboard/BFS": [5],
 		"/dashboard/DFS": [6],
-		"/dashboard/Minimax": [7],
-		"/dashboard/RecursiveBFS": [8],
-		"/dashboard/UCS": [9]
+		"/dashboard/IDA": [7],
+		"/dashboard/MINIMAX": [8],
+		"/dashboard/RecursiveBFS": [9],
+		"/dashboard/UCS": [10]
 	};
 
 export const hooks = {

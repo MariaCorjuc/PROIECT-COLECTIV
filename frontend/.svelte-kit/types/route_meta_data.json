@@ -4,7 +4,8 @@
 	"/dashboard/A": [],
 	"/dashboard/BFS": [],
 	"/dashboard/DFS": [],
-	"/dashboard/Minimax": [],
+	"/dashboard/IDA": [],
+	"/dashboard/MINIMAX": [],
 	"/dashboard/RecursiveBFS": [],
 	"/dashboard/UCS": []
 }
