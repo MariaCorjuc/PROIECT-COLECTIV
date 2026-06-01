@@ -1,10 +1,11 @@
+// @ts-nocheck
 import React, { useState } from 'react';
 
 export default function ExpectimaxVisualizer() {
   const leaves = [
-    3, 12, 8,  2, 4, 6,  14, 5, 2,  // Subarborele Stânga
-    4, 21, 1,  3, 12, 5,  6, 1, 1,  // Subarborele Mijloc
-    2, 3, 5,   5, 6, 9,   1, 4, 5   // Subarborele Dreapta
+    3, 12, 8,  2, 4, 6,  14, 5, 2,  
+    4, 21, 1,  3, 12, 5,  6, 1, 1,  
+    2, 3, 5,   5, 6, 9,   1, 4, 5   
   ];
 
   const [level2Values, setLevel2Values] = useState(Array(9).fill('MAX'));
@@ -12,19 +13,18 @@ export default function ExpectimaxVisualizer() {
   const [rootValue, setRootValue] = useState('MAX');
 
   function startExpectimax() {
-    const computedLevel2 = [];
+    const computedLevel2 = []; 
     for (let i = 0; i < leaves.length; i += 3) {
       const group = leaves.slice(i, i + 3);
       computedLevel2.push(Math.max(...group));
     }
 
-    const computedLevel1 = [];
+    const computedLevel1 = []; 
     for (let i = 0; i < computedLevel2.length; i += 3) {
       const group = computedLevel2.slice(i, i + 3);
       const average = group.reduce((sum, val) => sum + val, 0) / group.length;
-      computedLevel1.push(Number(average.toFixed(2))); // rotunjit la 2 zecimale
+      computedLevel1.push(Number(average.toFixed(2))); 
     }
-
     const computedRoot = Math.max(...computedLevel1);
 
     setTimeout(() => {
@@ -46,7 +46,6 @@ export default function ExpectimaxVisualizer() {
         ▶ Start Expectimax
       </button>
 
-      {/* NIVEL 0: RĂDĂCINĂ (MAX) */}
       <div style={styles.level}>
         <div style={styles.maxRootNode}>
           <div style={styles.label}>MAX</div>
@@ -54,7 +53,6 @@ export default function ExpectimaxVisualizer() {
         </div>
       </div>
 
-      {/* NIVEL 1: CHANCE */}
       <div style={styles.levelGroup}>
         {level1Values.map((val, idx) => (
           <div key={idx} style={styles.chanceNode}>
@@ -64,7 +62,6 @@ export default function ExpectimaxVisualizer() {
         ))}
       </div>
 
-      {/* NIVEL 2: NODURI INTERMEDIARE (MAX) */}
       <div style={styles.levelGroup}>
         {level2Values.map((val, idx) => (
           <div key={idx} style={styles.maxSubNode}>
@@ -74,13 +71,12 @@ export default function ExpectimaxVisualizer() {
         ))}
       </div>
 
-      {/* NIVEL 3: FRUNZE (VALORI TERMINALE) */}
       <div style={styles.leavesGrid}>
         {leaves.map((val, idx) => (
           <div key={idx} style={styles.valueNode}>
             {val}
           </div>
-        ))}
+        ))} 
       </div>
     </div>
   );
