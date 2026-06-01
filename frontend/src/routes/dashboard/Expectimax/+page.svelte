@@ -9,14 +9,20 @@
     const { createRoot } = await import('react-dom/client');
     
     try {
-      const AVisualizer = ((await import('./Arbore.js')) as any).default;
+
+      const ExpectimaxVisualizer =
+        ((await import('$lib/components/ExpectimaxVizualizer')) as any).default;
 
       if (containerReact) {
         rootReact = createRoot(containerReact);
-        rootReact.render(React.createElement(AVisualizer));
+
+        rootReact.render(
+          React.createElement(ExpectimaxVisualizer)
+        );
       }
+
     } catch (err) {
-      console.error("Eroare la încărcarea React Flow din arbore.js:", err);
+      console.error("Eroare la încărcarea Expectimax:", err);
     }
   });
 
@@ -27,26 +33,43 @@
   });
 </script>
 
+
 <div class="pagina-container">
-   <div class="textAlgoritm">A* Search</div>
 
-   <div class="container-cerinta">
-      <div class="textProblema">
-         În această problemă starea de start este Arad, iar starea obiectiv este București.
-         Costurile de tranziție sunt scrise pe muchii, iar estimarea euristică, h, a distanței de la start
-         la obiectiv este scrisă în tabel. Să presupunem că legăturile sunt întotdeauna rupte prin
-         alegerea stării care urmează mai întâi în ordine alfabetică.
-      </div>
-
-      <div class="coloana-imagini">
-         <img src="/poze/harta+euristica.png" alt="A*" class="poza-graf">
-      </div>
+   <div class="textAlgoritm">
+      Expectimax
    </div>
 
-   <div class="zona-arbore-jos" bind:this={containerReact}></div>
+   <div class="container-cerinta">
+
+      <div class="textProblema">
+
+         Aplicați strategia de căutare
+         Expectimax pe arborii de mai jos.
+         
+         Nodurile șansă sunt reprezentate
+         de nodurile de pe nivelul MIN.
+
+      </div>
+
+      <img
+         src="/poze/expectimax.png"
+         alt="Arbore Expectimax"
+         class="poza-graf"
+      >
+
+   </div>
+
+   <div
+      class="zona-arbore-jos"
+      bind:this={containerReact}
+   ></div>
+
 </div>
 
+
 <style>
+
   .pagina-container {
      width: 100%;
      box-sizing: border-box;
@@ -72,7 +95,8 @@
      font-size: 20px;
      line-height: 1.6;
      text-align: justify;
-     width: 50%;
+     flex: 1;
+     max-width: 550px;
   }
       
   .container-cerinta {
@@ -84,19 +108,10 @@
      margin-bottom: 40px;
   }
 
-  .coloana-imagini {
-     display: flex;
-     flex-direction: column;
-     gap: 15px;
-     width: 50%;
-  }
-
   .poza-graf {
-     width: 100%;
+     max-width: 55%;
      height: auto;
-     object-fit: contain;
      border-radius: 12px;
-     box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   }
 
   .zona-arbore-jos {
@@ -105,5 +120,7 @@
      flex-direction: column;
      align-items: center;
      box-sizing: border-box;
+     min-height: 500px;
   }
+
 </style>

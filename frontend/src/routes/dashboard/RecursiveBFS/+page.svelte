@@ -9,11 +9,11 @@
     const { createRoot } = await import('react-dom/client');
     
     try {
-      const AVisualizer = ((await import('./Arbore.js')) as any).default;
+      const RBFSVisualizer = ((await import('./Arbore.js')) as any).default;
 
       if (containerReact) {
         rootReact = createRoot(containerReact);
-        rootReact.render(React.createElement(AVisualizer));
+        rootReact.render(React.createElement(RBFSVisualizer));
       }
     } catch (err) {
       console.error("Eroare la încărcarea React Flow din arbore.js:", err);
@@ -33,15 +33,13 @@
    <div class="container-cerinta">
       <div class="textProblema">
          În această problemă starea de start este Arad, iar starea obiectiv este București.
-         <br><br>
          Costurile de tranziție sunt scrise pe muchii, iar estimarea euristică, h, a distanței de la start
          la obiectiv este scrisă în tabel. Să presupunem că legăturile sunt întotdeauna rupte prin
          alegerea stării care urmează mai întâi în ordine alfabetică.
       </div>
 
       <div class="coloana-imagini">
-         <img src="/poze/harta.png" alt="Graful hărții RBFS" class="poza-graf">
-         <img src="/poze/euristica.png" alt="Tabel valori euristice h" class="poza-graf-euristica">
+         <img src="/poze/harta+euristica.png" alt="RBFS" class="poza-graf">
       </div>
    </div>
 
@@ -71,7 +69,7 @@
      color: #1a2426;
      font-family: sans-serif;
      padding-top: 20px;
-     font-size: 25px;
+     font-size: 20px;
      line-height: 1.6;
      text-align: justify;
      width: 50%;
@@ -94,17 +92,9 @@
   }
 
   .poza-graf {
-     width: 80%;
+     width: 100%;
      height: auto;
      object-fit: contain;
-     border-radius: 12px;
-     box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  }
-
-  .poza-graf-euristica {
-     width: 70%;
-     height: auto;
-     object-fit: right;
      border-radius: 12px;
      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   }
