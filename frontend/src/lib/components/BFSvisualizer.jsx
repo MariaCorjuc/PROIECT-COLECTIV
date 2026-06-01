@@ -3,39 +3,145 @@ import ReactFlow, { Background, Controls } from 'reactflow';
 import 'reactflow/dist/style.css';
 
 const bfsSteps = [
+  // Pasul 0: Doar rădăcina
   {
-    nodes: [
-      { id: 'bucuresti', data: { label: 'Bucuresti (Start)' }, position: { x: 400, y: 50 }, style: { background: '#93c5fd' } }
-    ],
+    nodes: [{ id: 'bucuresti', data: { label: 'Bucuresti (Start)' }, position: { x: 400, y: 50 }, style: { background: '#93c5fd' } }],
     edges: []
   },
+  // Pasul 1: Expandare București -> Buzău, Pitești, Târgoviște
   {
     nodes: [
       { id: 'bucuresti', data: { label: 'Bucuresti' }, position: { x: 400, y: 50 }, style: { background: '#cbd5e1' } },
       { id: 'buzau', data: { label: 'Buzau' }, position: { x: 200, y: 150 }, style: { background: '#93c5fd' } },
       { id: 'pitesti', data: { label: 'Pitesti' }, position: { x: 400, y: 150 }, style: { background: '#93c5fd' } },
-      { id: 'targoviste', data: { label: 'Targoviste' }, position: { x: 600, y: 150 }, style: { background: '#93c5fd' } }
+      { id: 'targoviste', data: { label: 'Targoviste' }, position: { x: 600, y: 150 }, style: { background: '#93c5fd' } },
     ],
     edges: [
       { id: 'b-bu', source: 'bucuresti', target: 'buzau' },
       { id: 'b-p', source: 'bucuresti', target: 'pitesti' },
-      { id: 'b-t', source: 'bucuresti', target: 'targoviste' }
+      { id: 'b-t', source: 'bucuresti', target: 'targoviste' },
     ]
   },
+  // Pasul 2: Expandare Buzău (nu aduce noduri noi)
   {
     nodes: [
       { id: 'bucuresti', data: { label: 'Bucuresti' }, position: { x: 400, y: 50 }, style: { background: '#cbd5e1' } },
       { id: 'buzau', data: { label: 'Buzau (Expandat)' }, position: { x: 200, y: 150 }, style: { background: '#cbd5e1' } },
       { id: 'pitesti', data: { label: 'Pitesti' }, position: { x: 400, y: 150 }, style: { background: '#93c5fd' } },
-      { id: 'targoviste', data: { label: 'Targoviste' }, position: { x: 600, y: 150 }, style: { background: '#93c5fd' } }
+      { id: 'targoviste', data: { label: 'Targoviste' }, position: { x: 600, y: 150 }, style: { background: '#93c5fd' } },
     ],
     edges: [
       { id: 'b-bu', source: 'bucuresti', target: 'buzau', animated: true },
       { id: 'b-p', source: 'bucuresti', target: 'pitesti' },
-      { id: 'b-t', source: 'bucuresti', target: 'targoviste' }
+      { id: 'b-t', source: 'bucuresti', target: 'targoviste' },
+    ]
+  },
+  // Pasul 3: Expandare Pitești -> Râmnicu Vâlcea
+  {
+    nodes: [
+      { id: 'bucuresti', data: { label: 'Bucuresti' }, position: { x: 400, y: 50 }, style: { background: '#cbd5e1' } },
+      { id: 'buzau', data: { label: 'Buzau' }, position: { x: 200, y: 150 }, style: { background: '#cbd5e1' } },
+      { id: 'pitesti', data: { label: 'Pitesti' }, position: { x: 400, y: 150 }, style: { background: '#cbd5e1' } },
+      { id: 'targoviste', data: { label: 'Targoviste' }, position: { x: 600, y: 150 }, style: { background: '#93c5fd' } },
+      { id: 'rv', data: { label: 'Ramnicu Valcea' }, position: { x: 400, y: 250 }, style: { background: '#93c5fd' } },
+    ],
+    edges: [
+      { id: 'b-bu', source: 'bucuresti', target: 'buzau' },
+      { id: 'b-p', source: 'bucuresti', target: 'pitesti', animated: true },
+      { id: 'b-t', source: 'bucuresti', target: 'targoviste' },
+      { id: 'p-rv', source: 'pitesti', target: 'rv' },
+    ]
+  },
+  // Pasul 4: Expandare Târgoviște -> Brașov, Făgăraș
+  {
+    nodes: [
+      { id: 'bucuresti', data: { label: 'Bucuresti' }, position: { x: 400, y: 50 }, style: { background: '#cbd5e1' } },
+      { id: 'buzau', data: { label: 'Buzau' }, position: { x: 200, y: 150 }, style: { background: '#cbd5e1' } },
+      { id: 'pitesti', data: { label: 'Pitesti' }, position: { x: 400, y: 150 }, style: { background: '#cbd5e1' } },
+      { id: 'targoviste', data: { label: 'Targoviste' }, position: { x: 600, y: 150 }, style: { background: '#cbd5e1' } },
+      { id: 'rv', data: { label: 'Ramnicu Valcea' }, position: { x: 400, y: 250 }, style: { background: '#93c5fd' } },
+      { id: 'brasov', data: { label: 'Brasov' }, position: { x: 550, y: 250 }, style: { background: '#93c5fd' } },
+      { id: 'fagaras', data: { label: 'Fagaras' }, position: { x: 700, y: 250 }, style: { background: '#93c5fd' } },
+    ],
+    edges: [
+      { id: 'b-bu', source: 'bucuresti', target: 'buzau' },
+      { id: 'b-p', source: 'bucuresti', target: 'pitesti' },
+      { id: 'b-t', source: 'bucuresti', target: 'targoviste', animated: true },
+      { id: 'p-rv', source: 'pitesti', target: 'rv' },
+      { id: 't-br', source: 'targoviste', target: 'brasov' },
+      { id: 't-fa', source: 'targoviste', target: 'fagaras' },
+    ]
+  },
+  // Pasul 5: Expandare Râmnicu Vâlcea -> Sibiu
+  {
+    nodes: [
+      { id: 'bucuresti', data: { label: 'Bucuresti' }, position: { x: 400, y: 50 }, style: { background: '#cbd5e1' } },
+      { id: 'buzau', data: { label: 'Buzau' }, position: { x: 200, y: 150 }, style: { background: '#cbd5e1' } },
+      { id: 'pitesti', data: { label: 'Pitesti' }, position: { x: 400, y: 150 }, style: { background: '#cbd5e1' } },
+      { id: 'targoviste', data: { label: 'Targoviste' }, position: { x: 600, y: 150 }, style: { background: '#cbd5e1' } },
+      { id: 'rv', data: { label: 'Ramnicu Valcea' }, position: { x: 400, y: 250 }, style: { background: '#cbd5e1' } },
+      { id: 'brasov', data: { label: 'Brasov' }, position: { x: 550, y: 250 }, style: { background: '#93c5fd' } },
+      { id: 'fagaras', data: { label: 'Fagaras' }, position: { x: 700, y: 250 }, style: { background: '#93c5fd' } },
+      { id: 'sibiu', data: { label: 'Sibiu' }, position: { x: 400, y: 350 }, style: { background: '#93c5fd' } },
+    ],
+    edges: [
+      { id: 'b-bu', source: 'bucuresti', target: 'buzau' },
+      { id: 'b-p', source: 'bucuresti', target: 'pitesti' },
+      { id: 'b-t', source: 'bucuresti', target: 'targoviste' },
+      { id: 'p-rv', source: 'pitesti', target: 'rv', animated: true },
+      { id: 't-br', source: 'targoviste', target: 'brasov' },
+      { id: 't-fa', source: 'targoviste', target: 'fagaras' },
+      { id: 'rv-sb', source: 'rv', target: 'sibiu' },
+    ]
+  },
+  // Pasul 6: Expandare Brașov (nimic nou)
+  {
+    nodes: [
+      { id: 'bucuresti', data: { label: 'Bucuresti' }, position: { x: 400, y: 50 }, style: { background: '#cbd5e1' } },
+      { id: 'buzau', data: { label: 'Buzau' }, position: { x: 200, y: 150 }, style: { background: '#cbd5e1' } },
+      { id: 'pitesti', data: { label: 'Pitesti' }, position: { x: 400, y: 150 }, style: { background: '#cbd5e1' } },
+      { id: 'targoviste', data: { label: 'Targoviste' }, position: { x: 600, y: 150 }, style: { background: '#cbd5e1' } },
+      { id: 'rv', data: { label: 'Ramnicu Valcea' }, position: { x: 400, y: 250 }, style: { background: '#cbd5e1' } },
+      { id: 'brasov', data: { label: 'Brasov' }, position: { x: 550, y: 250 }, style: { background: '#cbd5e1' } },
+      { id: 'fagaras', data: { label: 'Fagaras' }, position: { x: 700, y: 250 }, style: { background: '#93c5fd' } },
+      { id: 'sibiu', data: { label: 'Sibiu' }, position: { x: 400, y: 350 }, style: { background: '#93c5fd' } },
+    ],
+    edges: [
+      { id: 'b-bu', source: 'bucuresti', target: 'buzau' },
+      { id: 'b-p', source: 'bucuresti', target: 'pitesti' },
+      { id: 'b-t', source: 'bucuresti', target: 'targoviste' },
+      { id: 'p-rv', source: 'pitesti', target: 'rv' },
+      { id: 't-br', source: 'targoviste', target: 'brasov', animated: true },
+      { id: 't-fa', source: 'targoviste', target: 'fagaras' },
+      { id: 'rv-sb', source: 'rv', target: 'sibiu' },
+    ]
+  },
+  // Pasul 7: Expandare Făgăraș -> Sighișoara (Ținta a fost găsită!)
+  {
+    nodes: [
+      { id: 'bucuresti', data: { label: 'Bucuresti' }, position: { x: 400, y: 50 }, style: { background: '#cbd5e1' } },
+      { id: 'buzau', data: { label: 'Buzau' }, position: { x: 200, y: 150 }, style: { background: '#cbd5e1' } },
+      { id: 'pitesti', data: { label: 'Pitesti' }, position: { x: 400, y: 150 }, style: { background: '#cbd5e1' } },
+      { id: 'targoviste', data: { label: 'Targoviste' }, position: { x: 600, y: 150 }, style: { background: '#cbd5e1' } },
+      { id: 'rv', data: { label: 'Ramnicu Valcea' }, position: { x: 400, y: 250 }, style: { background: '#cbd5e1' } },
+      { id: 'brasov', data: { label: 'Brasov' }, position: { x: 550, y: 250 }, style: { background: '#cbd5e1' } },
+      { id: 'fagaras', data: { label: 'Fagaras' }, position: { x: 700, y: 250 }, style: { background: '#cbd5e1' } },
+      { id: 'sibiu', data: { label: 'Sibiu' }, position: { x: 400, y: 350 }, style: { background: '#93c5fd' } },
+      { id: 'sighisoara', data: { label: 'Sighisoara (GOAL)' }, position: { x: 700, y: 350 }, style: { background: '#4ade80', fontWeight: 'bold' } },
+    ],
+    edges: [
+      { id: 'b-bu', source: 'bucuresti', target: 'buzau' },
+      { id: 'b-p', source: 'bucuresti', target: 'pitesti' },
+      { id: 'b-t', source: 'bucuresti', target: 'targoviste' },
+      { id: 'p-rv', source: 'pitesti', target: 'rv' },
+      { id: 't-br', source: 'targoviste', target: 'brasov' },
+      { id: 't-fa', source: 'targoviste', target: 'fagaras', animated: true },
+      { id: 'rv-sb', source: 'rv', target: 'sibiu' },
+      { id: 'fa-sg', source: 'fagaras', target: 'sighisoara', stroke: '#4ade80' },
     ]
   }
 ];
+
 
 export default function BfsVisualizer() {
   const [currentStep, setCurrentStep] = useState(0);
