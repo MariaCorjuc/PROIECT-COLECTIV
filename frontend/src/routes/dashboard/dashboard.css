@@ -21,7 +21,6 @@
   overflow: hidden;
 }
 
-/* SIDEBAR */
 .sidebar {
   width: 280px;
   background: rgba(255, 255, 255, 0.25);
@@ -31,7 +30,6 @@
   flex-direction: column;
 }
 
-/* REZOLVARE: Logo text simplu, gri stins discret, nu mai este buton, nu se mai aprinde cu verde */
 .sidebar-logo {
   font-size: 19px;
   font-weight: 700;
@@ -58,7 +56,6 @@
   letter-spacing: 0.5px;
 }
 
-/* Butoanele din meniu */
 .nav-btn {
   background: none;
   border: none;
@@ -82,12 +79,10 @@
   color: white;
 }
 
-/* Distanțare specială pentru butonul Home de sus */
 .home-btn {
   margin-bottom: 5px;
 }
 
-/* CONTINUT CONTENT DREAPTA */
 .content-area {
   flex: 1;
   display: flex;
@@ -151,7 +146,6 @@
   padding: 30px;
 }
 
-/* HOME LAYOUT (Caseta + Leaderboard) */
 .dashboard-home-layout {
   display: grid;
   grid-template-columns: 1fr 320px;
@@ -171,7 +165,6 @@
   font-size: 15px;
 }
 
-/* LEADERBOARD CHENAR */
 .content-leaderboard {
   background: rgba(255, 255, 255, 0.6);
   border-radius: 20px;

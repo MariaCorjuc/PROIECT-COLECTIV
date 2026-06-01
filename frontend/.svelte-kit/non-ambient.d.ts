@@ -46,7 +46,7 @@ declare module "$app/types" {
 			"/dashboard/UCS": Record<string, never>;
 			"/login": Record<string, never>
 		};
-		Pathname(): "/" | "/dashboard" | "/dashboard/A" | "/dashboard/BFS" | "/dashboard/DFS" | "/dashboard/UCS";
+		Pathname(): "/" | "/dashboard" | "/dashboard/A" | "/dashboard/BFS" | "/dashboard/DFS" | "/dashboard/Minimax" | "/dashboard/RecursiveBFS" | "/dashboard/UCS";
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
 		Asset(): "/poze/harta.png" | "/poze/logo.png" | "/poze/logo2.png" | "/robots.txt" | string & {};
 	}

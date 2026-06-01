@@ -9,7 +9,6 @@
     const { createRoot } = await import('react-dom/client');
     
     try {
-      // Importăm componenta care conține doar butoanele și canvas-ul de React Flow
       const DFSVisualizer = ((await import('$lib/components/DFSVisualizer.jsx')) as any).default;
 
       if (containerReact) {
@@ -80,7 +79,7 @@
      align-items: center;
      justify-content: space-between;
      gap: 40px;
-     margin-bottom: 40px; /* Adăugăm spațiu între partea de sus și arborele de jos */
+     margin-bottom: 40px;
   }
 
   .poza-graf {
@@ -89,7 +88,6 @@
      border-radius: 12px;
   }
 
-  /* Stil nou pentru zona de jos, care va sta sub text și imagine */
   .zona-arbore-jos {
      width: 100%;
      display: flex;

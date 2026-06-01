@@ -28,7 +28,7 @@
 </script>
 
 <div class="pagina-container">
-   <div class="textAlgoritm">A* Search</div>
+   <div class="textAlgoritm">Recursive Best First Search</div>
 
    <div class="container-cerinta">
       <div class="textProblema">
@@ -40,7 +40,7 @@
       </div>
 
       <div class="coloana-imagini">
-         <img src="/poze/harta.png" alt="Graful hărții A*" class="poza-graf">
+         <img src="/poze/harta.png" alt="Graful hărții RBFS" class="poza-graf">
          <img src="/poze/euristica.png" alt="Tabel valori euristice h" class="poza-graf-euristica">
       </div>
    </div>

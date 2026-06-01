@@ -9,7 +9,6 @@
     const { createRoot } = await import('react-dom/client');
     
     try {
-      // Importăm componenta dedicată pentru vizualizarea algoritmului Minimax
       const MinimaxVisualizer = ((await import('$lib/components/MinimaxVisualizer.jsx')) as any).default;
 
       if (containerReact) {
@@ -41,8 +40,6 @@
          <br><br>
          Determinați valoarea minimax a nodului rădăcină și drumul optim ales de algoritm.
       </div>
-
-      <img src="/poze/harta_minimax.png" alt="Structura arborelui Minimax" class="poza-graf">
    </div>
 
    <div class="zona-arbore-jos" bind:this={containerReact}></div>
@@ -74,23 +71,12 @@
      font-size: 20px;
      line-height: 1.6;
      text-align: justify;
-     flex: 1;
-     max-width: 500px;
+     width: 100%;
   }
       
   .container-cerinta {
      width: 100%;
-     display: flex;
-     align-items: center;
-     justify-content: space-between;
-     gap: 40px;
      margin-bottom: 40px;
-  }
-
-  .poza-graf {
-     max-width: 55%;
-     height: auto;
-     border-radius: 12px;
   }
 
   .zona-arbore-jos {

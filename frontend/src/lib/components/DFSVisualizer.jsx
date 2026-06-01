@@ -10,10 +10,6 @@ import ReactFlow, {
 
 import 'reactflow/dist/style.css';
 
-// =======================================================
-// ANIMAȚIE PULSE (STIL MODERN RUSSELL & NORVIG)
-// =======================================================
-
 const style = document.createElement('style');
 style.innerHTML = `
 @keyframes pulse {
@@ -23,10 +19,6 @@ style.innerHTML = `
 }
 `;
 document.head.appendChild(style);
-
-// =======================================================
-// DESIGN ȘI STILURI REUTILIZABILE
-// =======================================================
 
 /** @type {import('react').CSSProperties} */
 const nodeContainerStyle = {
@@ -76,9 +68,6 @@ const DFSNode = ({ data }) => (
 
 const nodeTypes = { dfsNode: DFSNode };
 
-// =======================================================
-// DATE ALGORITM DFS (TRAVERSARE ÎN ADÂNCIME)
-// =======================================================
 const pașiAlgoritm = [
   {
     titlu: "(a) Starea inițială: Se adaugă Arad în stivă",
@@ -165,9 +154,6 @@ const pașiAlgoritm = [
   }
 ];
 
-// =======================================================
-// COMPONENTA INTERNĂ CU LOGICĂ DE FULLSCREEN
-// =======================================================
 function DFSVisualizerInner() {
   const [pasCurent, setPasCurent] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -178,7 +164,6 @@ function DFSVisualizerInner() {
 
   const stareaCurenta = pașiAlgoritm[pasCurent];
 
-  // Auto-centrare când se schimbă pasul sau modul ecranului
   useEffect(() => {
     const timer = setTimeout(() => {
       fitView({ padding: isFullscreen ? 0.7 : 1.4, duration: 400 });
@@ -186,7 +171,6 @@ function DFSVisualizerInner() {
     return () => clearTimeout(timer);
   }, [pasCurent, fitView, isFullscreen]);
 
-  // Detector ieșire fullscreen (tasta ESC)
   useEffect(() => {
     const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
     document.addEventListener('fullscreenchange', handleFullscreenChange);
@@ -283,9 +267,6 @@ function DFSVisualizerInner() {
   );
 }
 
-// =======================================================
-// EXPORT FINAL CU PROVIDER
-// =======================================================
 export default function DFSVisualizer() {
   return (
     <ReactFlowProvider>

@@ -5,7 +5,7 @@
   let isLogin = $state(true); 
   let email = $state('');
   let password = $state('');
-  let name = $state(''); // ✅ ADAUGAT DOAR ASTA
+  let name = $state(''); 
 
   let errorMessage = $state('');
   let successMessage = $state('');
@@ -19,7 +19,6 @@
 
     try {
       if (isLogin) {
-        // --- AUTENTIFICARE REALĂ ---
         const response = await fetch('http://localhost:8080/api/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -32,7 +31,7 @@
           if (!response.ok) throw new Error(data.message || 'Email sau parolă incorectă!');
 
           localStorage.setItem('token', data.token);
-          if (data.name) localStorage.setItem('name', data.name); // ✅ ADAUGAT
+          if (data.name) localStorage.setItem('name', data.name); 
 
           window.location.href = '/dashboard';
         } else {
@@ -41,11 +40,10 @@
         }
 
       } else {
-        // --- ÎNREGISTRARE REALĂ ---
         const response = await fetch('http://localhost:8080/api/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, name }) // ✅ ADAUGAT NAME
+          body: JSON.stringify({ email, password, name }) 
         });
 
         const contentType = response.headers.get("content-type");
@@ -59,7 +57,7 @@
           successMessage = 'Contul a fost creat cu succes! Te poți autentifica acum.';
           isLogin = true;
           password = '';
-          name = ''; // reset
+          name = ''; 
         } else {
           const textError = await response.text();
           throw new Error(textError || 'Eroare la crearea contului pe server.');
@@ -106,7 +104,7 @@
         <input id="reg-password" type="password" bind:value={password} placeholder="••••••••" required />
       </div>
 
-      {#if !isLogin} <!-- ✅ DOAR LA REGISTER -->
+      {#if !isLogin} 
         <div class="field">
           <label for="reg-name">Nume</label>
           <input id="reg-name" type="text" bind:value={name} placeholder="Numele tău" required />

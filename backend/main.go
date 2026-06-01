@@ -11,24 +11,20 @@ import (
 	"github.com/rs/cors"
 )
 
-// DB global
 var db *sql.DB
 
-// REQUEST
 type LoginRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 	Name     string `json:"name,omitempty"`
 }
 
-// RESPONSE
 type LoginResponse struct {
 	Token   string `json:"token,omitempty"`
 	Message string `json:"message,omitempty"`
 	Name    string `json:"name,omitempty"`
 }
 
-// INIT DB
 func initDB() {
 	var err error
 
@@ -47,7 +43,6 @@ func initDB() {
 	fmt.Println("🚀 Conectat la PostgreSQL!")
 }
 
-// LOGIN
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -88,7 +83,6 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(LoginResponse{Message: "Email sau parolă incorectă!"})
 }
 
-// REGISTER
 func registerHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -119,7 +113,6 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(LoginResponse{Message: "Cont creat cu succes!"})
 }
 
-// MAIN
 func main() {
 	initDB()
 	defer db.Close()

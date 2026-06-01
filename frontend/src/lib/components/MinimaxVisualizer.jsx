@@ -10,9 +10,6 @@ import ReactFlow, {
 
 import 'reactflow/dist/style.css';
 
-// =======================================================
-// ANIMAȚIE PULSE (STIL MODERN RUSSELL & NORVIG)
-// =======================================================
 const style = document.createElement('style');
 style.innerHTML = `
 @keyframes pulseMinimax {
@@ -23,10 +20,7 @@ style.innerHTML = `
 `;
 document.head.appendChild(style);
 
-// =======================================================
-// DESIGN ȘI STILURI REUTILIZABILE
-// =======================================================
-/** @type {import('react').CSSProperties} */
+/** @type {React.CSSProperties} */
 const nodeContainerStyle = {
   display: 'flex',
   flexDirection: 'column',
@@ -35,17 +29,16 @@ const nodeContainerStyle = {
 };
 
 /**
- * @param {string} nodeType - 'MAX' | 'MIN' | 'LEAF'
- * @param {boolean} isActive - dacă nodul face parte din drumul calculat la pasul respectiv
- * @param {boolean} isCurrent - dacă nodul este cel evaluat curent
+ * @param {string} nodeType
+ * @param {boolean} isActive
+ * @param {boolean} isCurrent
  * @returns {React.CSSProperties}
  */
 const nodeShapeStyle = (nodeType, isActive, isCurrent) => {
   const isLeaf = nodeType === 'LEAF';
-  
   return {
     padding: isLeaf ? '4px 10px' : '8px 16px',
-    borderRadius: isLeaf ? '6px' : (nodeType === 'MAX' ? '4px' : '16px'), // MAX pătrat/triunghiular, MIN rotunjit
+    borderRadius: isLeaf ? '6px' : (nodeType === 'MAX' ? '4px' : '16px'),
     backgroundColor: isActive ? '#0A7E8C' : '#ffffff',
     border: isCurrent ? '2.5px solid #064e57' : (isActive ? '2px solid #0A7E8C' : '1.5px solid #1a2426'),
     color: isActive ? '#ffffff' : '#000000',
@@ -61,7 +54,8 @@ const nodeShapeStyle = (nodeType, isActive, isCurrent) => {
   };
 };
 
-/** @param {{ data: { label: string; info: string; nodeType: string; isActive: boolean; isCurrent: boolean } }} props */
+/** * @param {{ data: { label: string; info: string; nodeType: string; isActive: boolean; isCurrent: boolean } }} props 
+ */
 const MinimaxNode = ({ data }) => (
   <div style={nodeContainerStyle}>
     {data.nodeType !== 'ROOT' && (
@@ -83,16 +77,17 @@ const MinimaxNode = ({ data }) => (
 
 const nodeTypes = { minimaxNode: MinimaxNode };
 
-// =======================================================
-// GENERARE AUTOMATĂ COORDONATE ȘI STRUCTURĂ ARBORE
-// =======================================================
 const valoriFrunze = [3, 12, 8, 2, 4, 6, 14, 5, 2, 4, 21, 1, 3, 12, 5, 6, 1, 1, 2, 3, 5, 5, 6, 9, 1, 4, 5];
 
+/**
+ * @param {string[]} activeNodeIds
+ * @param {string} currentNodeId
+ * @param {Record<string, number>} valoriNoduri
+ */
 const genereazăArboreMinimax = (activeNodeIds = [], currentNodeId = "", valoriNoduri = {}) => {
   const nodes = [];
   const edges = [];
 
-  // 1. Rădăcină (Nivel 0 - MAX)
   const valRădăcină = valoriNoduri['R'] !== undefined ? ` [${valoriNoduri['R']}]` : '';
   nodes.push({
     id: 'R',
@@ -101,7 +96,6 @@ const genereazăArboreMinimax = (activeNodeIds = [], currentNodeId = "", valoriN
     data: { label: `R (MAX)${valRădăcină}`, info: 'Rădăcină', nodeType: 'MAX', isActive: activeNodeIds.includes('R'), isCurrent: currentNodeId === 'R' }
   });
 
-  // 2. Nivel 1 (MIN) - 3 noduri
   for (let i = 0; i < 3; i++) {
     const idN1 = `N1_${i}`;
     const etichetăN1 = i === 0 ? 'A' : (i === 1 ? 'B' : 'C');
@@ -123,7 +117,6 @@ const genereazăArboreMinimax = (activeNodeIds = [], currentNodeId = "", valoriN
       style: { stroke: activeNodeIds.includes(idN1) ? '#0A7E8C' : '#b5b5b5', strokeWidth: activeNodeIds.includes(idN1) ? 3 : 1.5 }
     });
 
-    // 3. Nivel 2 (MAX) - 9 noduri
     for (let j = 0; j < 3; j++) {
       const idN2 = `N2_${i}_${j}`;
       const etichetăN2 = `${etichetăN1}${j + 1}`;
@@ -145,7 +138,6 @@ const genereazăArboreMinimax = (activeNodeIds = [], currentNodeId = "", valoriN
         style: { stroke: activeNodeIds.includes(idN2) ? '#0A7E8C' : '#b5b5b5', strokeWidth: activeNodeIds.includes(idN2) ? 3 : 1.5 }
       });
 
-      // 4. Nivel 3 (Frunze) - 27 noduri
       for (let k = 0; k < 3; k++) {
         const indexFrunză = i * 9 + j * 3 + k;
         const idFrunză = `L_${indexFrunză}`;
@@ -169,67 +161,55 @@ const genereazăArboreMinimax = (activeNodeIds = [], currentNodeId = "", valoriN
       }
     }
   }
-
   return { nodes, edges };
 };
 
-// =======================================================
-// PAȘII DE SIMULARE AI ALGORITMULUI MINIMAX
-// =======================================================
 const pașiAlgoritm = [
   {
     titlu: "(a) Starea Inițială: Se generează arborele complet de joc. Algoritmul începe explorarea de la rădăcină în jos.",
     ...genereazăArboreMinimax([], 'R', {})
   },
   {
-    titlu: "(b) Evaluare Subarbore A1: MAX alege maximul dintre copiii săi (3, 12, 8) -> Nodul A1 devine 12.",
-    ...genereazăArboreMinimax(['N2_0_0', 'L_1'], 'N2_0_0', { 'N2_0_0': 12 })
-  },
-  {
-    titlu: "(c) Evaluare Subarbore A2 și A3: A2 selectează max(2, 4, 6) = 6. A3 selectează max(14, 5, 2) = 14.",
+    titlu: "(b) Evaluare Subarbore A: Nodurile MAX de jos aleg valoarea maximă a frunzelor. A1=12, A2=6, A3=14.",
     ...genereazăArboreMinimax(['N2_0_0', 'N2_0_1', 'N2_0_2'], 'N2_0_2', { 'N2_0_0': 12, 'N2_0_1': 6, 'N2_0_2': 14 })
   },
   {
-    titlu: "(d) Propagare la Nivelul MIN (Nodul A): MIN alege minimul dintre opțiunile lui MAX: min(12, 6, 14) -> A devine 6.",
+    titlu: "(c) Propagare la Nivelul MIN (Nodul A): MIN alege minimul dintre opțiunile lui MAX: min(12, 6, 14) -> A devine 6.",
     ...genereazăArboreMinimax(['N1_0', 'N2_0_1'], 'N1_0', { 'N2_0_0': 12, 'N2_0_1': 6, 'N2_0_2': 14, 'N1_0': 6 })
   },
   {
-    titlu: "(e) Evaluare Subarbore B: Se calculează valorile pentru B1=21, B2=12, B3=2. Nodul B (MIN) alege min(21, 12, 2) -> B devine 2.",
+    titlu: "(d) Evaluare Subarbore B: Nodurile MAX calculează B1=21, B2=12, B3=6. Nodul B (MIN) alege min(21, 12, 6) -> B devine 6.",
     ...genereazăArboreMinimax(['N1_0', 'N1_1', 'N2_1_2'], 'N1_1', { 
       'N2_0_0': 12, 'N2_0_1': 6, 'N2_0_2': 14, 'N1_0': 6,
-      'N2_1_0': 21, 'N2_1_1': 12, 'N2_1_2': 2, 'N1_1': 2 
+      'N2_1_0': 21, 'N2_1_1': 12, 'N2_1_2': 6, 'N1_1': 6 
     })
   },
   {
-    titlu: "(f) Evaluare Subarbore C: Se calculează valorile pentru C1=5, C2=9, C3=5. Nodul C (MIN) alege min(5, 9, 5) -> C devine 5.",
+    titlu: "(e) Evaluare Subarbore C: Nodurile MAX calculează C1=5, C2=9, C3=5. Nodul C (MIN) alege min(5, 9, 5) -> C devine 5.",
     ...genereazăArboreMinimax(['N1_0', 'N1_1', 'N1_2', 'N2_2_0'], 'N1_2', { 
       'N2_0_0': 12, 'N2_0_1': 6, 'N2_0_2': 14, 'N1_0': 6,
-      'N2_1_0': 21, 'N2_1_1': 12, 'N2_1_2': 2, 'N1_1': 2,
+      'N2_1_0': 21, 'N2_1_1': 12, 'N2_1_2': 6, 'N1_1': 6,
       'N2_2_0': 5, 'N2_2_1': 9, 'N2_2_2': 5, 'N1_2': 5 
     })
   },
   {
-    titlu: "Decizie Finală Rădăcină (MAX): Alege valoarea maximă dintre ramurile MIN: max(A:6, B:2, C:5) -> Rădăcina alege 6. Drumul optim: R -> A -> A2.",
+    titlu: "Decizie Finală Rădăcină (MAX): Alege valoarea maximă dintre ramurile MIN: max(A:6, B:6, C:5) -> Rădăcina alege 6. Drumurile optime sunt R -> A -> A2 sau R -> B -> B3.",
     ...genereazăArboreMinimax(['R', 'N1_0', 'N2_0_1'], 'R', { 
       'N2_0_0': 12, 'N2_0_1': 6, 'N2_0_2': 14, 'N1_0': 6,
-      'N2_1_0': 21, 'N2_1_1': 12, 'N2_1_2': 2, 'N1_1': 2,
+      'N2_1_0': 21, 'N2_1_1': 12, 'N2_1_2': 6, 'N1_1': 6,
       'N2_2_0': 5, 'N2_2_1': 9, 'N2_2_2': 5, 'N1_2': 5,
       'R': 6
     })
   }
 ];
 
-// =======================================================
-// COMPONENTA INTERNĂ CU LOGICĂ DE FULLSCREEN
-// =======================================================
 function MinimaxVisualizerInner() {
   const [pasCurent, setPasCurent] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
-
+  
   /** @type {React.RefObject<HTMLDivElement | null>} */
   const containerRef = useRef(null);
   const { fitView } = useReactFlow();
-
   const stareaCurenta = pașiAlgoritm[pasCurent];
 
   useEffect(() => {
@@ -273,7 +253,6 @@ function MinimaxVisualizerInner() {
         border: isFullscreen ? 'none' : '1px solid rgba(0,0,0,0.1)',
       }}
     >
-      {/* Bara de control */}
       <div
         style={{
           position: 'absolute',
@@ -335,9 +314,6 @@ function MinimaxVisualizerInner() {
   );
 }
 
-// =======================================================
-// EXPORT FINAL CU PROVIDER
-// =======================================================
 export default function MinimaxVisualizer() {
   return (
     <ReactFlowProvider>
@@ -347,7 +323,7 @@ export default function MinimaxVisualizer() {
 }
 
 /**
- * @param {boolean} d - Disabled status
+ * @param {boolean} d
  * @returns {React.CSSProperties}
  */
 const btnStyle = (d) => ({
@@ -357,6 +333,7 @@ const btnStyle = (d) => ({
   transition: 'background 0.2s'
 });
 
+/** @type {React.CSSProperties} */
 const fsBtnStyle = {
   padding: '8px 14px', borderRadius: '8px', border: '1px solid #0A7E8C',
   background: 'transparent', color: '#0A7E8C', fontWeight: '600', cursor: 'pointer'
