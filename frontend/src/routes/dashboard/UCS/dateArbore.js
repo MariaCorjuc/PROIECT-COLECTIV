@@ -61,7 +61,7 @@ export const istoricPasi = [
                 id: 's-zerind',
                 source: 'Start',
                 target: 'Zerind',
-                label: '140',
+                label: '75',
                 type: 'straight'
             }
         ]

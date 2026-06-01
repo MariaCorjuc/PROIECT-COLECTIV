@@ -48,6 +48,6 @@ declare module "$app/types" {
 		};
 		Pathname(): "/" | "/dashboard" | "/dashboard/A" | "/dashboard/BFS" | "/dashboard/DFS" | "/dashboard/Expectimax" | "/dashboard/IDA" | "/dashboard/Minimax" | "/dashboard/RecursiveBFS" | "/dashboard/UCS";
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
-		Asset(): "/poze/euristica.png" | "/poze/harta+euristica.png" | "/poze/harta.png" | "/poze/logo.png" | "/poze/logo2.png" | "/robots.txt" | string & {};
+		Asset(): "/poze/BFS.png" | "/poze/euristica.png" | "/poze/expectimax.png" | "/poze/harta+euristica.png" | "/poze/harta.png" | "/poze/logo.png" | "/poze/logo2.png" | "/robots.txt" | string & {};
 	}
 }
