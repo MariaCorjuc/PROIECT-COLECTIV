@@ -17,6 +17,7 @@ export function monteazaArbore(elementHtml, noduriDeAfisat, muchiiDeAfisat){
 
     if(root && noduriDeAfisat.length<=1 && muchiiDeAfisat.length<=1)
     {
+        //curatam memoria
         root.unmount();
         root=null;
     }

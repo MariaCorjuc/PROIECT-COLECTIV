@@ -48,6 +48,6 @@ declare module "$app/types" {
 		};
 		Pathname(): "/" | "/dashboard" | "/dashboard/A" | "/dashboard/BFS" | "/dashboard/DFS" | "/dashboard/Minimax" | "/dashboard/RecursiveBFS" | "/dashboard/UCS";
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
-		Asset(): "/poze/harta.png" | "/poze/logo.png" | "/poze/logo2.png" | "/robots.txt" | string & {};
+		Asset(): "/poze/euristica.png" | "/poze/harta.png" | "/poze/logo.png" | "/poze/logo2.png" | "/robots.txt" | string & {};
 	}
 }

@@ -27,6 +27,7 @@
   }
 
   function pornesteAnimatia(){
+   //daca ruleaza nu facem nimic
    if(cronometru) return;
 
    cronometru=setInterval( () => {
