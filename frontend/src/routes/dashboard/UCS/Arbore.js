@@ -1,4 +1,3 @@
-
 import ReactFlow from 'reactflow';
 import 'reactflow/dist/style.css';
 import React from 'react';
@@ -17,7 +16,6 @@ export function monteazaArbore(elementHtml, noduriDeAfisat, muchiiDeAfisat){
 
     if(root && noduriDeAfisat.length<=1 && muchiiDeAfisat.length<=1)
     {
-        //curatam memoria
         root.unmount();
         root=null;
     }

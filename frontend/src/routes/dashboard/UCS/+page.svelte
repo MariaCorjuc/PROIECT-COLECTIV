@@ -26,30 +26,28 @@
       }
   }
 
-  function pornesteAnimatia(){
-   //daca ruleaza nu facem nimic
-   if(cronometru) return;
 
-   cronometru=setInterval( () => {
-         if(pasCurent<istoricPasi.length-1)
+    function butonBack(){
+   
+       if(pasCurent>0)
+         {
+            pasCurent-=1;
+            actualizeazaEcran();
+         }
+  }
+
+
+  function butonNext(){
+   
+       if(pasCurent<istoricPasi.length-1)
          {
             pasCurent+=1;
             actualizeazaEcran();
-         }else{
-            opresteAnimatia();
          }
-   
-   }   ,1500);
-  }
-
-  function opresteAnimatia(){
-   clearInterval(cronometru);
-   cronometru=null;
   }
 
 
 function restartAnimatia(){
-   opresteAnimatia();
    pasCurent=0;
    actualizeazaEcran();
 }
@@ -93,8 +91,8 @@ function fullScreen(){
    <div bind:this={containerArbore} class="container-aplicatie-fullscreen" >
    
       <div class="container-butoane">
-      <button class="btn-nav" onclick={pornesteAnimatia}>▶ Play</button>
-      <button class="btn-nav" onclick={opresteAnimatia}>⏸ Pause</button>
+      <button class="btn-nav" onclick={butonBack}>Back</button>
+      <button class="btn-nav" onclick={butonNext}>Next</button>
       <button class="btn-nav" onclick={restartAnimatia}>Restart</button>
       <button class="btn-nav" onclick={fullScreen}>⛶</button>
    </div>
@@ -157,18 +155,32 @@ function fullScreen(){
 
   }
 
+   
    .btn-nav{
         background: #0A7E8C;
         border: none;
         text-align: center;
-        padding: 12px 45px;
-        font-size: 25px;
-        font-weight: 800px;
+        padding: 10px 35px;
+        font-size: 20px;
+        font-weight: 700;
         color: white;
-        border-radius: 12px;
+        border-radius: 30px;
         cursor: pointer;
         transition: all 0.2s;
+        box-shadow: 0 4px 10px rgba(10, 126, 140, 0.2);
+        transition: all 0.25s ease;
     }
+
+    .btn-nav:hover {
+      background: #08636e;  
+      transform: translateY(-2px); 
+      box-shadow: 0 6px 15px rgba(10, 126, 140, 0.3);
+  }
+
+    .btn-nav:active {
+      transform: translateY(1px); 
+      box-shadow: 0 2px 5px rgba(10, 126, 140, 0.2);
+  }
 
     div:fullscreen{
       width: 100vw !important;
