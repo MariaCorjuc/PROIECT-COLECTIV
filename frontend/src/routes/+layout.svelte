@@ -66,7 +66,7 @@
 
                         Uniform Cost Search
                     </button>
-                    <button class="nav-btn" class:active={isAlgoActive('Minimax')} onclick={() => goto('/dashboard/Minimax')}>Minimax</button>
+                    <button class="nav-btn" class:active={isAlgoActive('Minimax')} onclick={() => goto('/dashboard/MINIMAX')}>Minimax</button>
                     <button class="nav-btn" class:active={isAlgoActive('Expectimax')} onclick={() => goto('/dashboard/Expectimax')}>Expectimax</button>
                     <button class="nav-btn" class:active={isAlgoActive('RecursiveBFS')} onclick={() => goto('/dashboard/RecursiveBFS')}>Recursive Best First Search</button>
                     <button class="nav-btn" class:active={isAlgoActive('IDA')} onclick={() => goto('/dashboard/IDA')}>Iterative Deepening A* Search</button>
