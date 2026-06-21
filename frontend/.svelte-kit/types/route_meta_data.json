@@ -1,12 +1,18 @@
 {
 	"/": [],
-	"/dashboard": [],
+	"/dashboard": [
+		"src/routes/dashboard/+page.server.ts"
+	],
 	"/dashboard/A": [],
 	"/dashboard/BFS": [],
 	"/dashboard/DFS": [],
 	"/dashboard/Expectimax": [],
 	"/dashboard/IDA": [],
-	"/dashboard/Minimax": [],
+	"/dashboard/IDA/Problema1": [],
+	"/dashboard/IDA/Problema2": [],
+	"/dashboard/MINIMAX": [],
 	"/dashboard/RecursiveBFS": [],
-	"/dashboard/UCS": []
+	"/dashboard/UCS": [],
+	"/dashboard/UCS/Problema1": [],
+	"/dashboard/UCS/Problema2": []
 }

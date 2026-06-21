@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
   import { istoricPasi } from './dateArbore.js'
   import { NodIDA } from '../../../lib/components/IDANod.jsx';
   import {monteazaArbore } from '../../../lib/components/IDAArbore.jsx';
@@ -47,6 +48,12 @@
    
  }
 
+ function butonProblema1(){
+    goto('/dashboard/IDA/Problema1');
+}
+  function butonProblema2(){
+      goto('/dashboard/IDA/Problema2');
+  }
 
 function restartAnimatia(){
    pasCurent=0;
@@ -89,21 +96,27 @@ function fullScreen(){
          <img src="/poze/harta+euristica.png" alt="Graful problemei IDA*" class="poza-graf">
       </div>
 
+  
    <div bind:this={containerArbore} class="container-aplicatie-fullscreen" >
    
       <div class="container-butoane">
-      <button class="btn-nav" onclick={butonBack}>Back</button>
-      <button class="btn-nav" onclick={butonNext}>Next</button>
-      <button class="btn-nav" onclick={restartAnimatia}>Restart</button>
-      <button class="btn-nav" onclick={fullScreen}>⛶</button>
-   </div>
+         <button class="btn-nav" onclick={butonBack}>Back</button>
+         <button class="btn-nav" onclick={butonNext}>Next</button>
+         <button class="btn-nav" onclick={restartAnimatia}>Restart</button>
+         <button class="btn-nav" onclick={fullScreen}>⛶</button>
+      </div>
+
       <div bind:this={zonaGraf} class="container-zonaGraf"></div>
- 
+
+   <div class="container-butoane">
+         <button class="btn-nav" onclick={butonProblema1}>Problema 1</button>
+         <button class="btn-nav" onclick={butonProblema2}>Problema 2</button>
+   </div>
 </div>
 </div>
 
 <style>
-  .pagina-container {
+   .pagina-container {
      width: 100%; 
      box-sizing: border-box;
      padding-top: 20px;
@@ -129,7 +142,7 @@ function fullScreen(){
      line-height: 1.6;
      text-align: justify;
      flex: 1;
-     max-width: 350px; 
+     max-width: 500px; 
   }
      
   .container-cerinta {
@@ -141,7 +154,7 @@ function fullScreen(){
   }
 
   .poza-graf {
-     max-width: 65%; 
+     max-width: 55%; 
      height: auto; 
      border-radius: 12px;
   }
@@ -153,7 +166,6 @@ function fullScreen(){
       padding: 40px 0;
       width: 100%;
       background: transparent;
-
   }
 
    .btn-nav{

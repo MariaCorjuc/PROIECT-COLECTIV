@@ -30,8 +30,10 @@
           const data = await response.json();
           if (!response.ok) throw new Error(data.message || 'Email sau parolă incorectă!');
 
-          localStorage.setItem('token', data.token);
-          if (data.name) localStorage.setItem('name', data.name); 
+         localStorage.setItem('token', data.token);
+         if (data.name) localStorage.setItem('name', data.name); 
+         
+          localStorage.setItem('userEmail', email);
 
           window.location.href = '/dashboard';
         } else {

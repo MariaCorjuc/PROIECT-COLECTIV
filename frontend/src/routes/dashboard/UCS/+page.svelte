@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
   import { monteazaArbore } from './Arbore.js';
   import { istoricPasi } from './dateArbore.js'
 
@@ -16,6 +17,9 @@
 
   /** @type {any} */
   let cronometru = null;
+
+  /** @type {any}*/
+  let problemaActiva=null;
 
   function actualizeazaEcran(){
 
@@ -47,6 +51,13 @@
   }
 
 
+function butonProblema1(){
+    goto('/dashboard/UCS/Problema1');
+}
+  function butonProblema2(){
+      goto('/dashboard/UCS/Problema2');
+  }
+
 function restartAnimatia(){
    pasCurent=0;
    actualizeazaEcran();
@@ -63,6 +74,7 @@ function fullScreen(){
       }
       else{
          document.exitFullscreen();
+         problemaActiva=null;
          setTimeout(actualizeazaEcran,300);
       }
       
@@ -91,13 +103,18 @@ function fullScreen(){
    <div bind:this={containerArbore} class="container-aplicatie-fullscreen" >
    
       <div class="container-butoane">
-      <button class="btn-nav" onclick={butonBack}>Back</button>
-      <button class="btn-nav" onclick={butonNext}>Next</button>
-      <button class="btn-nav" onclick={restartAnimatia}>Restart</button>
-      <button class="btn-nav" onclick={fullScreen}>⛶</button>
-   </div>
+         <button class="btn-nav" onclick={butonBack}>Back</button>
+         <button class="btn-nav" onclick={butonNext}>Next</button>
+         <button class="btn-nav" onclick={restartAnimatia}>Restart</button>
+         <button class="btn-nav" onclick={fullScreen}>⛶</button>
+      </div>
+
       <div bind:this={zonaGraf} class="container-zonaGraf"></div>
- 
+
+   <div class="container-butoane">
+         <button class="btn-nav" onclick={butonProblema1}>Problema 1</button>
+         <button class="btn-nav" onclick={butonProblema2}>Problema 2</button>
+   </div>
 </div>
 </div>
 
@@ -152,10 +169,8 @@ function fullScreen(){
       padding: 40px 0;
       width: 100%;
       background: transparent;
-
   }
 
-   
    .btn-nav{
         background: #0A7E8C;
         border: none;

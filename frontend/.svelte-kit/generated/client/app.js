@@ -12,22 +12,30 @@ export const nodes = [
 	() => import('./nodes/8'),
 	() => import('./nodes/9'),
 	() => import('./nodes/10'),
-	() => import('./nodes/11')
+	() => import('./nodes/11'),
+	() => import('./nodes/12'),
+	() => import('./nodes/13'),
+	() => import('./nodes/14'),
+	() => import('./nodes/15')
 ];
 
 export const server_loads = [];
 
 export const dictionary = {
 		"/": [2],
-		"/dashboard": [3],
+		"/dashboard": [~3],
 		"/dashboard/A": [4],
 		"/dashboard/BFS": [5],
 		"/dashboard/DFS": [6],
 		"/dashboard/Expectimax": [7],
 		"/dashboard/IDA": [8],
-		"/dashboard/Minimax": [9],
-		"/dashboard/RecursiveBFS": [10],
-		"/dashboard/UCS": [11]
+		"/dashboard/IDA/Problema1": [9],
+		"/dashboard/IDA/Problema2": [10],
+		"/dashboard/MINIMAX": [11],
+		"/dashboard/RecursiveBFS": [12],
+		"/dashboard/UCS": [13],
+		"/dashboard/UCS/Problema1": [14],
+		"/dashboard/UCS/Problema2": [15]
 	};
 
 export const hooks = {
