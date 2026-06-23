@@ -1,0 +1,655 @@
+<script lang="ts">
+  import { onMount, onDestroy } from 'svelte';
+  import { goto } from '$app/navigation';
+
+  let containerLaborator: HTMLDivElement | undefined = undefined;
+
+  interface NodArbore {
+    id: number;
+    eticheta: string;
+    euristica: string;
+    parinteId: number | null;
+  }
+
+  const problema1 = {
+    titlu: "Problema 1: Căutare A*",
+    cerinta: "Folosind graful din imaginea de mai jos, reconstruiți arborele de căutare A* rezultat. Starea de start este S, iar starea obiectiv este F. În caz de egalitate a valorii f(n) = g(n) + h(n), nodurile se aleg în ordine alfabetică.",
+    noduriDisponibile: ['S', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
+    solutiePerfecta: [
+      { nod: 'S', parinte: null, valoare: '10' },
+      
+      { nod: 'A', parinte: 'S', valoare: '11' },
+      { nod: 'B', parinte: 'S', valoare: '11' },
+      { nod: 'C', parinte: 'S', valoare: '12' },
+      
+      { nod: 'C', parinte: 'A', valoare: '13' },
+      { nod: 'G', parinte: 'A', valoare: '11' },
+      
+      { nod: 'E', parinte: 'G', valoare: '13' },
+      { nod: 'D', parinte: 'G', valoare: '13' },
+      
+      { nod: 'A', parinte: 'B', valoare: '14' },
+      { nod: 'D', parinte: 'B', valoare: '12' },
+      
+      { nod: 'E', parinte: 'D', valoare: '14' }, 
+      { nod: 'F', parinte: 'D', valoare: '12' }, 
+      
+      { nod: 'B', parinte: 'C', valoare: '18' },
+      { nod: 'H', parinte: 'C', valoare: '14' }
+    ]
+  };
+
+  let noduriArbore = $state<Array<NodArbore>>([]);
+  let idContor = $state(0);
+  let exercitiuCorectat = $state(false);
+  let mesajRezultat = $state("");
+  
+  let cronometruSecunde = $state(10);
+  let idIntervalCronometru: any = null;
+
+  let parinteIdSelectat = $state<number | null>(null); 
+  let afiseazaMeniuAdaugare = $state(false);
+  let nodSelectatPentruAdaugare = $state("");
+  let valoareCalculataInput = $state("");
+
+  function iesireManuala() {
+    if (idIntervalCronometru) clearInterval(idIntervalCronometru);
+    document.removeEventListener('fullscreenchange', detecteazaIesireFullscreen);
+    
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+    goto('/dashboard/A');
+  }
+
+  function detecteazaIesireFullscreen() {
+    if (!document.fullscreenElement) {
+      if (idIntervalCronometru) clearInterval(idIntervalCronometru);
+      goto('/dashboard/A');
+    }
+  }
+
+  onMount(() => {
+    noduriArbore = [{ id: idContor++, eticheta: 'S', euristica: '10', parinteId: null }];
+    parinteIdSelectat = noduriArbore[0].id; 
+
+    const cereFullscreen = () => {
+      if (containerLaborator && containerLaborator.requestFullscreen) {
+        containerLaborator.requestFullscreen().catch(() => {});
+      }
+    };
+    setTimeout(cereFullscreen, 300);
+
+    document.addEventListener('fullscreenchange', detecteazaIesireFullscreen);
+  });
+
+  onDestroy(() => {
+    if (idIntervalCronometru) clearInterval(idIntervalCronometru);
+    document.removeEventListener('fullscreenchange', detecteazaIesireFullscreen);
+  });
+
+  function selecteazaParinteDinDesen(idNod: number) {
+    if (exercitiuCorectat && cronometruSecunde < 10) return;
+    parinteIdSelectat = idNod;
+  }
+
+  function cereAdaugareDinLista(eticheta: string) {
+    if (exercitiuCorectat && cronometruSecunde < 10) return;
+    if (parinteIdSelectat === null) {
+      alert("Te rugăm să selectezi mai întâi nodul părinte făcând click pe el în desenul din centru!");
+      return;
+    }
+    nodSelectatPentruAdaugare = eticheta;
+    valoareCalculataInput = "";
+    afiseazaMeniuAdaugare = true;
+  }
+
+  function salveazaNodInArbore() {
+    noduriArbore = [...noduriArbore, {
+      id: idContor++,
+      eticheta: nodSelectatPentruAdaugare,
+      euristica: valoareCalculataInput.trim(),
+      parinteId: parinteIdSelectat
+    }];
+    afiseazaMeniuAdaugare = false;
+  }
+
+  function anuleazaAdaugare() {
+    afiseazaMeniuAdaugare = false;
+  }
+
+  async function acordaPuncte(puncte: number) {
+    const email = localStorage.getItem("userEmail");
+
+    if (!email) {
+      console.error("❌ Eroare: Nu s-a găsit cheia 'userEmail' în localStorage!");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/api/update-points", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: email,
+          points: puncte
+        })
+      });
+
+      if (!response.ok) {
+        console.error("❌ Serverul a întors o eroare la salvarea punctajului.");
+      } else {
+        console.log("✅ Punctele au fost adăugate cu succes în baza de date.");
+      }
+    } catch (err) {
+      console.error("❌ Eroare de rețea la actualizarea punctelor:", err);
+    }
+  }
+
+  async function verificaRezolvare() {
+    if (noduriArbore.length !== problema1.solutiePerfecta.length) {
+      exercitiuCorectat = true;
+      mesajRezultat = "❌ Incorect. Numărul de noduri nu corespunde.";
+      return;
+    }
+
+    let totulEsteCorect = true;
+
+    for (let sol of problema1.solutiePerfecta) {
+      const nodStudent = noduriArbore.find(n => {
+        if (n.eticheta.toUpperCase() !== sol.nod.toUpperCase()) return false;
+        
+        if (sol.parinte === null) {
+          return n.parinteId === null;
+        } else {
+          if (n.parinteId === null) return false;
+          const p = gasesteNod(n.parinteId);
+          return p && p.eticheta.toUpperCase() === sol.parinte.toUpperCase();
+        }
+      });
+
+      if (!nodStudent || nodStudent.euristica.trim() !== sol.valoare) {
+        totulEsteCorect = false;
+        break;
+      }
+    }
+
+    exercitiuCorectat = true;
+
+    if (totulEsteCorect) {
+      mesajRezultat = "🎉 Excelent!";
+      
+      await acordaPuncte(100); 
+
+      if (idIntervalCronometru) clearInterval(idIntervalCronometru);
+      cronometruSecunde = 5;
+
+      idIntervalCronometru = setInterval(() => {
+        cronometruSecunde -= 1;
+        if (cronometruSecunde <= 0) {
+          clearInterval(idIntervalCronometru);
+          iesireManuala();
+        }
+      }, 1000);
+    } else {
+      mesajRezultat = "❌ Incorect. ";
+    }
+  }
+
+  function gasesteNod(id: number) {
+    return noduriArbore.find((n: NodArbore) => n.id === id);
+  }
+
+  function obtineNiveluri() {
+    let niveluri: Array<Array<NodArbore>> = [];
+    function determinaNivel(nod: NodArbore): number {
+      if (nod.parinteId === null) return 0;
+      const parinte = noduriArbore.find((n: NodArbore) => n.id === nod.parinteId);
+      return parinte ? determinaNivel(parinte) + 1 : 0;
+    }
+    noduriArbore.forEach((nod: NodArbore) => {
+      const niv = determinaNivel(nod);
+      if (!niveluri[niv]) niveluri[niv] = [];
+      niveluri[niv].push(nod);
+    });
+    return niveluri;
+  }
+
+  function calculeazaPozitie(nodId: number, latimeSpatiu: number) {
+    const toateNivelurile = obtineNiveluri();
+    let nivelNod = 0;
+    let indexInNivel = 0;
+    let totalPeNivel = 1;
+
+    for (let n = 0; n < toateNivelurile.length; n++) {
+      const gasit = toateNivelurile[n].findIndex((nod: NodArbore) => nod.id === nodId);
+      if (gasit !== -1) {
+        nivelNod = n;
+        indexInNivel = gasit;
+        totalPeNivel = toateNivelurile[n].length;
+        break;
+      }
+    }
+
+    const spatiuOrizontal = latimeSpatiu / (totalPeNivel + 1);
+    const x = spatiuOrizontal * (indexInNivel + 1);
+    const y = 100 + nivelNod * 110;
+    return { x, y };
+  }
+</script>
+
+<div class="ecran-complet-student" bind:this={containerLaborator}>
+  <div class="antet-cerinta">
+    <div class="grup-text-cerinta">
+      <h2>{problema1.titlu}</h2>
+      <p>{problema1.cerinta}</p>
+    </div>
+    <button class="buton-exit-direct" onclick={iesireManuala}>Exit ✕</button>
+  </div>
+
+  <div class="corp-interactiv">
+    <div class="panou-stanga-graf">
+      <h3>Graf Referință</h3>
+      <div class="container-imagine">
+        <img src="/poze/Astar.png" alt="Graful inițial al problemei" />
+      </div>
+    </div>
+
+    <div class="zona-desen">
+      <p class="instructiune-scurta">Indicație: Click pe un nod din arbore (devine portocaliu), apoi alege-i fiul din lista din dreapta.</p>
+      
+      <svg class="canvas-legaturi">
+        {#each noduriArbore as nod}
+          {#if nod.parinteId !== null && gasesteNod(nod.parinteId)}
+            {@const pozCopil = calculeazaPozitie(nod.id, 650)}
+            {@const pozParinte = calculeazaPozitie(nod.parinteId, 650)}
+            <line x1={pozParinte.x} y1={pozParinte.y} x2={pozCopil.x} y2={pozCopil.y} stroke="#0A7E8C" stroke-width="3" />
+            <circle cx={pozCopil.x} cy={pozCopil.y} r="5" fill="#0A7E8C" />
+          {/if}
+        {/each}
+      </svg>
+
+      {#each noduriArbore as nod}
+        {@const poz = calculeazaPozitie(nod.id, 650)}
+        <button 
+          class="nod-graf-arbore {parinteIdSelectat === nod.id ? 'parinte-activ' : ''}" 
+          style="left: {poz.x}px; top: {poz.y}px;"
+          onclick={() => selecteazaParinteDinDesen(nod.id)}
+        >
+          <span class="nume-nod">{nod.eticheta}</span>
+          {#if nod.euristica}
+            <span class="valoare-euristica">{nod.euristica}</span>
+          {/if}
+        </button>
+      {/each}
+
+      {#if afiseazaMeniuAdaugare}
+        <div class="fundal-intunecat-modal">
+          <div class="interfata-adaugare-interna">
+            <h4>Adaugă nodul {nodSelectatPentruAdaugare}</h4>
+            <p class="info-adaugare">Acesta va fi legat sub nodul: <strong>{noduriArbore.find(n => n.id === parinteIdSelectat)?.eticheta}</strong></p>
+
+            <label for="input-valoare">Valoare calculată f(n) sau h:</label>
+            <input id="input-valoare" type="text" placeholder="Introduceți costul numeric" bind:value={valoareCalculataInput} />
+
+            <div class="grup-butoane-meniu">
+              <button class="btn-salveaza" onclick={salveazaNodInArbore}>Confirmă</button>
+              <button class="btn-anuleaza" onclick={anuleazaAdaugare}>Anulează</button>
+            </div>
+          </div>
+        </div>
+      {/if}
+    </div>
+
+    <div class="panou-dreapta-noduri">
+      <h3>Noduri Graf</h3>
+      <p class="ajutor-text">Apasă pe un nod pentru a-l introduce:</p>
+      <div class="grila-noduri">
+        {#each problema1.noduriDisponibile as nodEticheta}
+          <button 
+            class="buton-nod-lista" 
+            disabled={exercitiuCorectat && cronometruSecunde < 10 && mesajRezultat.includes("🎉")}
+            onclick={() => cereAdaugareDinLista(nodEticheta)}
+          >
+            {nodEticheta}
+          </button>
+        {/each}
+      </div>
+    </div>
+  </div>
+
+  <div class="bara-jos">
+    <div class="mesaj-feedback">
+      {mesajRezultat}
+      {#if exercitiuCorectat && cronometruSecunde < 10 && mesajRezultat.includes("🎉")}
+        <span class="text-redirect"> Redirecționare în {cronometruSecunde} secunde...</span>
+      {/if}
+    </div>
+    
+    {#if !(exercitiuCorectat && cronometruSecunde < 10 && mesajRezultat.includes("🎉"))}
+      <button class="buton-verifica" onclick={verificaRezolvare}>Verifică Rezolvarea</button>
+    {/if}
+  </div>
+</div>
+
+<style>
+  .ecran-complet-student {
+    width: 100vw;
+    height: 100vh;
+    background-color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    font-family: sans-serif;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  :global(:fullscreen) {
+    background-color: #f8fafc !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .antet-cerinta {
+    background-color: #ffffff;
+    padding: 20px 30px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .grup-text-cerinta {
+    max-width: 85%;
+  }
+  .antet-cerinta h2 {
+    margin: 0 0 6px 0;
+    color: #0A7E8C;
+    font-size: 26px;
+  }
+  .antet-cerinta p {
+    margin: 0;
+    color: #475569;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .buton-exit-direct {
+    background: #e6f2f4;
+    color: #0A7E8C;
+    border: none;
+    padding: 10px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .buton-exit-direct:hover {
+    transform: scale(1.05);
+  }
+
+  .corp-interactiv {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    background-color: #f1f5f9;
+  }
+
+  .panou-stanga-graf {
+    flex: 1.8;
+    background-color: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  .panou-stanga-graf h3 {
+    margin: 0 0 12px 0;
+    font-size: 18px;
+    color: #0f172a;
+    border-bottom: 2px solid #0A7E8C;
+    padding-bottom: 6px;
+    width: fit-content;
+  }
+  .container-imagine {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    overflow: hidden;
+  }
+  .container-imagine img {
+    width: 100%;
+    height: auto;
+    max-height: 95%;
+    object-fit: contain;
+  }
+
+  .zona-desen {
+    flex: 2.8;
+    background-color: #ffffff;
+    position: relative;
+    border-right: 1px solid #e2e8f0;
+    overflow: hidden;
+  }
+  .instructiune-scurta {
+    position: absolute;
+    top: 15px;
+    left: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #64748b;
+    margin: 0;
+    z-index: 10;
+  }
+  .canvas-legaturi {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .nod-graf-arbore {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    background-color: #ffffff;
+    border: 3px solid #0A7E8C;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+  }
+  .nod-graf-arbore.parinte-activ {
+    border-color: #ff9800 !important;
+    background-color: #fff3e0 !important;
+    box-shadow: 0 0 12px #ff9800;
+  }
+  .nume-nod {
+    font-weight: bold;
+    font-size: 16px;
+    color: #0f172a;
+  }
+  .valoare-euristica {
+    font-size: 10px;
+    background-color: #0A7E8C;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 20px;
+    position: absolute;
+    bottom: -13px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .fundal-intunecat-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.3);
+    backdrop-filter: blur(2px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .interfata-adaugare-interna {
+    width: 340px;
+    background-color: #ffffff;
+    border-top: 4px solid #0A7E8C;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .interfata-adaugare-interna h4 {
+    margin: 0 0 2px 0;
+    color: #0A7E8C;
+    font-size: 18px;
+  }
+  .info-adaugare {
+    margin: 0 0 5px 0;
+    font-size: 13px;
+    color: #64748b;
+  }
+  .interfata-adaugare-interna label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #475569;
+  }
+  .interfata-adaugare-interna input {
+    padding: 8px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+  }
+  .interfata-adaugare-interna input:focus {
+    border-color: #0A7E8C;
+  }
+  .grup-butoane-meniu {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .btn-salveaza {
+    flex: 1;
+    background-color: #0A7E8C;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .btn-salveaza:hover {
+    background-color: #0d9488;
+  }
+  .btn-anuleaza {
+    background-color: #e2e8f0;
+    color: #475569;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .btn-anuleaza:hover {
+    background-color: #cbd5e1;
+  }
+
+  .panou-dreapta-noduri {
+    flex: 1.1;
+    background-color: #f8fafc;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  .panou-dreapta-noduri h3 {
+    margin: 0 0 4px 0;
+    font-size: 18px;
+    color: #0f172a;
+  }
+  .ajutor-text {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0 0 16px 0;
+  }
+  .grila-noduri {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .buton-nod-lista {
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #0f172a;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+  }
+  .buton-nod-lista:hover:not(:disabled) {
+    border-color: #0A7E8C;
+    background-color: #f0fdfa;
+    transform: translateY(-1px);
+  }
+  .buton-nod-lista:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #f1f5f9;
+  }
+
+  .bara-jos {
+    background-color: #ffffff;
+    padding: 20px 30px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .mesaj-feedback {
+    font-size: 16px;
+    font-weight: bold;
+    color: #0f172a;
+  }
+  .text-redirect {
+    color: #0A7E8C;
+    font-style: italic;
+    margin-left: 8px;
+  }
+  .buton-verifica {
+    background-color: #0A7E8C;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(10, 126, 140, 0.3);
+  }
+  .buton-verifica:hover {
+    background-color: #0d9488;
+  }
+</style>

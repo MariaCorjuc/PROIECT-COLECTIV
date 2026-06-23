@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/dashboard/MINIMAX/+page.svelte";
+export { default as component } from "../../../../src/routes/dashboard/IDA/Problema1/+page.svelte";

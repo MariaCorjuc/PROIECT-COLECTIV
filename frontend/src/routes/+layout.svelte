@@ -9,15 +9,35 @@
     let userProfile = $state({
         name: 'User',
         role: 'Student',
+        points: 0,
         avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=User'
     });
 
-    onMount(() => {
+    onMount(async () => {
         const name = localStorage.getItem('name') || 'User';
+        const email = localStorage.getItem('userEmail'); 
+        let points = Number(localStorage.getItem('points') || 0);
+
+        if (email) {
+            try {
+                const response = await fetch("http://localhost:8080/api/leaderboard");
+                if (response.ok) {
+                    const leaderboard = await response.json();
+                    const userCurent = leaderboard.find((u: any) => u.email === email || u.name === name);
+                    if (userCurent) {
+                        points = userCurent.puncte;
+                        localStorage.setItem('points', points.toString());
+                    }
+                }
+            } catch (err) {
+                console.error("Eroare la preluarea punctajului din baza de date:", err);
+            }
+        }
 
         userProfile = {
             name,
             role: 'Student',
+            points,
             avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=' + name
         };
     });
@@ -28,6 +48,8 @@
     function handleLogout() {
         localStorage.removeItem('token');
         localStorage.removeItem('name');
+        localStorage.removeItem('points');
+        localStorage.removeItem('userEmail');
         goto('/');
     }
 </script>
@@ -63,17 +85,12 @@
                     <button class="nav-btn" class:active={isAlgoActive('DFS')} onclick={() => goto('/dashboard/DFS')}>Depth First Search</button>
                     <button class="nav-btn" class:active={isAlgoActive('A')} onclick={() => goto('/dashboard/A')}>A* Search</button>
                     <button class="nav-btn" class:active={isAlgoActive('UCS')} onclick={() => goto('/dashboard/UCS')}>
-
                         Uniform Cost Search
                     </button>
-                    <button class="nav-btn" class:active={isAlgoActive('Minimax')} onclick={() => goto('/dashboard/MINIMAX')}>Minimax</button>
+                    <button class="nav-btn" class:active={isAlgoActive('Minimax')} onclick={() => goto('/dashboard/Minimax')}>Minimax</button>
                     <button class="nav-btn" class:active={isAlgoActive('Expectimax')} onclick={() => goto('/dashboard/Expectimax')}>Expectimax</button>
                     <button class="nav-btn" class:active={isAlgoActive('RecursiveBFS')} onclick={() => goto('/dashboard/RecursiveBFS')}>Recursive Best First Search</button>
                     <button class="nav-btn" class:active={isAlgoActive('IDA')} onclick={() => goto('/dashboard/IDA')}>Iterative Deepening A* Search</button>
-
-                    
-                    <span class="section-title">Altele</span>
-                    <button class="nav-btn" class:active={isActive('/profile')} onclick={() => goto('/profile')}>Profilul Meu</button>
                 </nav>
 
                 <div class="sidebar-spacer"></div>
@@ -98,6 +115,7 @@
                     <div class="user-profile-widget">
                         <div class="user-info">
                             <span class="user-name">{userProfile.name}</span>
+                            <span class="user-points">⭐ {userProfile.points} puncte</span>
                             <span class="user-role">{userProfile.role}</span>
                         </div>
                         <img src={userProfile.avatar} alt="Avatar" class="avatar" />
@@ -287,9 +305,16 @@
         color: #0b3c33;
     }
 
-    .user-role {
+    .user-points {
         font-size: 11px;
-        color: rgba(11, 60, 51, 0.6);
+        font-weight: 700;
+        color: #0A7E8C;
+        margin: 1px 0;
+    }
+
+    .user-role {
+        font-size: 10px;
+        color: rgba(11, 60, 51, 0.5);
     }
 
     .avatar {

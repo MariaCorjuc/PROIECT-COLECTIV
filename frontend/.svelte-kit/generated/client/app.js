@@ -16,7 +16,11 @@ export const nodes = [
 	() => import('./nodes/12'),
 	() => import('./nodes/13'),
 	() => import('./nodes/14'),
-	() => import('./nodes/15')
+	() => import('./nodes/15'),
+	() => import('./nodes/16'),
+	() => import('./nodes/17'),
+	() => import('./nodes/18'),
+	() => import('./nodes/19')
 ];
 
 export const server_loads = [];
@@ -25,17 +29,21 @@ export const dictionary = {
 		"/": [2],
 		"/dashboard": [~3],
 		"/dashboard/A": [4],
-		"/dashboard/BFS": [5],
-		"/dashboard/DFS": [6],
-		"/dashboard/Expectimax": [7],
-		"/dashboard/IDA": [8],
-		"/dashboard/IDA/Problema1": [9],
-		"/dashboard/IDA/Problema2": [10],
-		"/dashboard/MINIMAX": [11],
-		"/dashboard/RecursiveBFS": [12],
-		"/dashboard/UCS": [13],
-		"/dashboard/UCS/Problema1": [14],
-		"/dashboard/UCS/Problema2": [15]
+		"/dashboard/A/problema1": [5],
+		"/dashboard/A/problema2": [6],
+		"/dashboard/BFS": [7],
+		"/dashboard/DFS": [8],
+		"/dashboard/Expectimax": [9],
+		"/dashboard/IDA": [10],
+		"/dashboard/IDA/Problema1": [11],
+		"/dashboard/IDA/Problema2": [12],
+		"/dashboard/Minimax": [13],
+		"/dashboard/RecursiveBFS": [14],
+		"/dashboard/RecursiveBFS/problema1": [15],
+		"/dashboard/RecursiveBFS/problema2": [16],
+		"/dashboard/UCS": [17],
+		"/dashboard/UCS/Problema1": [18],
+		"/dashboard/UCS/Problema2": [19]
 	};
 
 export const hooks = {

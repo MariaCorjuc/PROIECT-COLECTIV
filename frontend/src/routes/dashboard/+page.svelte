@@ -2,14 +2,13 @@
     import './dashboard.css';
     import type { PageData } from './$types';
 
-    // Preluăm datele live trimise de pe server (+page.server.ts)
     let { data }: { data: PageData } = $props();
 </script>
 
 <div class="dashboard-home-layout">
     <div class="welcome-box">
         <h2>Bine ai venit pe AiLearningPlatform!</h2>
-        <p>Aici este panoul tău principal. Selectează orice algoritm din menus din stânga pentru a-i studia logica.</p>
+        <p>Aici este panoul tău principal. Selectează orice algoritm din meniu.</p>
     </div>
 
     <div class="content-leaderboard">
