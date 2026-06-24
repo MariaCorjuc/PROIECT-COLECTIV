@@ -1,4 +1,4 @@
-export const raspunsCorect = ['S', 'A', 'B', 'D', 'H', 'D', 'E', 'C', 'F', 'F', 'G', 'G'];
+export const raspunsCorect = ['A','B','D','E','F','F','K','G','H'];
 
 /**
  *

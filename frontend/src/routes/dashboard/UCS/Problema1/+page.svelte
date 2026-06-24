@@ -6,14 +6,24 @@
     let pornit = $state(false);
     let statusValidare = $state(''); 
     
-    // Stare pentru a verifica dacă problema a fost deja rezolvată în trecut
     let dejaRezolvata = $state(false);
 
     onMount(() => {
-        // Verificăm în localStorage dacă problema a fost marcată ca rezolvată
         if (localStorage.getItem('problema_1_ucs_rezolvata') === 'true') {
             dejaRezolvata = true;
         }
+
+        const handleFullscreenChange = () => {
+            if (!document.fullscreenElement && pornit) {
+                inapoiLaTeorie();
+            }
+        };
+
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+
+        return () => {
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+        };
     });
 
     /** @type {HTMLDivElement | undefined} */
@@ -224,7 +234,6 @@
             statusValidare = 'corect';
             mesajFeedback = "🎉 Excelent! Ai aplicat corect algoritmul UCS pe acest graf.";
             
-            // Salvare status în localStorage pentru vizitele viitoare
             localStorage.setItem('problema_1_ucs_rezolvata', 'true');
             dejaRezolvata = true;
         } else {
@@ -259,8 +268,8 @@
         }
     };
 
-    function urmatoareaProblema() {
-        if (dejaRezolvata) return; // Împiedică resetarea dacă problema e deja rezolvată cu succes
+    function restartProblema() {
+        if (dejaRezolvata) return; 
         idCounter = 0;
         noduriDesenate = [{ idUnique: 'S_0', label: 'S', x: 400, y: 60 }];
         muchiiDesenate = [];
@@ -305,8 +314,8 @@
         
         <div class="rezolvare-graf" aria-label="Zonă interactivă pentru desenarea și mutarea grafului">
             <div class="controale-zoom">
-                <button onclick={zoomIn} title="Zoom In">＋</button>
-                <button onclick={zoomOut} title="Zoom Out">－</button>
+                <button onclick={zoomIn} title="Zoom In">+</button>
+                <button onclick={zoomOut} title="Zoom Out">-</button>
                 <button onclick={resetZoom} class="btn-reset-zoom">Reset ⟲</button>
             </div>
 
@@ -359,7 +368,7 @@
 
         <div class="cadran-noduri">
             <div class="widget-scor-permanent">
-                🏅 Cel mai bun punctaj: <strong>{dejaRezolvata ? 100 : celMaiBunPunctaj} / 100 puncte</strong>
+                🏅 Punctaj: <strong>{dejaRezolvata ? 100 : celMaiBunPunctaj} / 100 puncte</strong>
             </div>
 
             <h3>Noduri Disponibile</h3>
@@ -408,7 +417,7 @@
                     <div class="mesaj-eroare">
                         {mesajFeedback}
                         <p class="puncte-info">Puncte obținete: {punctajCurent} puncte.</p>
-                        <button class="btn-urmator-eroare" onclick={urmatoareaProblema}>Reîncearcă exercițiul ⟲</button>
+                        <button class="btn-urmator-eroare" onclick={restartProblema}>Reîncearcă exercițiul ⟲</button>
                     </div>
                 {/if}
 
@@ -417,7 +426,7 @@
                         <button class="btn-verifica" onclick={verificaRezolvare} disabled={muchiiDesenate.length === 0}>
                             Verifică
                         </button>
-                        <button class="btn-restart-oricand" onclick={urmatoareaProblema}>
+                        <button class="btn-restart-oricand" onclick={restartProblema}>
                             Restart ⟲
                         </button>
                     </div>
