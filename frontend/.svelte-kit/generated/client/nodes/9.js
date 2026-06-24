@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/dashboard/Expectimax/+page.svelte";
+export { default as component } from "../../../../src/routes/dashboard/DFS/+page.svelte";

@@ -3,12 +3,12 @@ import ReactFlow, { Background, Controls } from 'reactflow';
 import 'reactflow/dist/style.css';
 
 const bfsSteps = [
-  // Pasul 0: Doar rădăcina
+  // Doar rădăcina
   {
     nodes: [{ id: 'bucuresti', data: { label: 'Bucuresti (Start)' }, position: { x: 400, y: 50 }, style: { background: '#93c5fd' } }],
     edges: []
   },
-  // Pasul 1: Expandare București -> Buzău, Pitești, Târgoviște
+  // Expandare București -> Buzău, Pitești, Târgoviște
   {
     nodes: [
       { id: 'bucuresti', data: { label: 'Bucuresti' }, position: { x: 400, y: 50 }, style: { background: '#cbd5e1' } },
@@ -22,7 +22,7 @@ const bfsSteps = [
       { id: 'b-t', source: 'bucuresti', target: 'targoviste' },
     ]
   },
-  // Pasul 2: Expandare Buzău (nu aduce noduri noi)
+  // Expandare Buzău 
   {
     nodes: [
       { id: 'bucuresti', data: { label: 'Bucuresti' }, position: { x: 400, y: 50 }, style: { background: '#cbd5e1' } },
@@ -36,7 +36,7 @@ const bfsSteps = [
       { id: 'b-t', source: 'bucuresti', target: 'targoviste' },
     ]
   },
-  // Pasul 3: Expandare Pitești -> Râmnicu Vâlcea
+  // Expandare Pitești -> Râmnicu Vâlcea
   {
     nodes: [
       { id: 'bucuresti', data: { label: 'Bucuresti' }, position: { x: 400, y: 50 }, style: { background: '#cbd5e1' } },
@@ -52,7 +52,7 @@ const bfsSteps = [
       { id: 'p-rv', source: 'pitesti', target: 'rv' },
     ]
   },
-  // Pasul 4: Expandare Târgoviște -> Brașov, Făgăraș
+  // Expandare Târgoviște -> Brașov, Făgăraș
   {
     nodes: [
       { id: 'bucuresti', data: { label: 'Bucuresti' }, position: { x: 400, y: 50 }, style: { background: '#cbd5e1' } },
@@ -72,7 +72,7 @@ const bfsSteps = [
       { id: 't-fa', source: 'targoviste', target: 'fagaras' },
     ]
   },
-  // Pasul 5: Expandare Râmnicu Vâlcea -> Sibiu
+  //Expandare Râmnicu Vâlcea -> Sibiu
   {
     nodes: [
       { id: 'bucuresti', data: { label: 'Bucuresti' }, position: { x: 400, y: 50 }, style: { background: '#cbd5e1' } },
@@ -94,7 +94,7 @@ const bfsSteps = [
       { id: 'rv-sb', source: 'rv', target: 'sibiu' },
     ]
   },
-  // Pasul 6: Expandare Brașov (nimic nou)
+  // Expandare Brașov 
   {
     nodes: [
       { id: 'bucuresti', data: { label: 'Bucuresti' }, position: { x: 400, y: 50 }, style: { background: '#cbd5e1' } },
@@ -116,7 +116,7 @@ const bfsSteps = [
       { id: 'rv-sb', source: 'rv', target: 'sibiu' },
     ]
   },
-  // Pasul 7: Expandare Făgăraș -> Sighișoara (Ținta a fost găsită!)
+  //  Expandare Făgăraș -> Sighișoara (Ținta găsită)
   {
     nodes: [
       { id: 'bucuresti', data: { label: 'Bucuresti' }, position: { x: 400, y: 50 }, style: { background: '#cbd5e1' } },

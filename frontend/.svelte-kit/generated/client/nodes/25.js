@@ -1,0 +1,1 @@
+export { default as component } from "../../../../src/routes/dashboard/UCS/Problema2/+page.svelte";
