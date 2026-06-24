@@ -21,14 +21,31 @@
       { nod: 'Buzău', parinte: 'București', valoare: '306' },
       { nod: 'Pitești', parinte: 'București', valoare: '269' },
       { nod: 'Târgoviște', parinte: 'București', valoare: '232' },
+
+      { nod: 'București', parinte: 'Târgoviște', valoare: '379' },
       { nod: 'Buzău', parinte: 'Târgoviște', valoare: '393' },
       { nod: 'Brașov', parinte: 'Târgoviște', valoare: '291' },
       { nod: 'Făgăraș', parinte: 'Târgoviște', valoare: '305' },
+
+      { nod: 'București', parinte: 'Pitești', valoare: '457' },
       { nod: 'Râmnicu Vâlcea', parinte: 'Pitești', valoare: '307' },
+
       { nod: 'Făgăraș', parinte: 'Brașov', valoare: '314' },
+      { nod: 'Târgoviște', parinte: 'Brașov', valoare: '482' },
+ 
       { nod: 'Sighișoara', parinte: 'Făgăraș', valoare: '342' },
+      { nod: 'Brașov', parinte: 'Făgăraș', valoare: '416' },
+      { nod: 'Târgoviște', parinte: 'Făgăraș', valoare: '598' },
+
+      { nod: 'București', parinte: 'Buzău', valoare: '441' },
+      { nod: 'Târgoviște', parinte: 'Buzău', valoare: '381' },
+
       { nod: 'Sibiu', parinte: 'Râmnicu Vâlcea', valoare: '345' },
-      { nod: 'Mediaș', parinte: 'Sibiu', valoare: '366' }
+      { nod: 'Pitești', parinte: 'Râmnicu Vâlcea', valoare: '391' },
+
+      { nod: 'Brașov', parinte: 'Făgăraș', valoare: '425' },
+      { nod: 'Târgoviște', parinte: 'Făgăraș', valoare: '607' },
+      { nod: 'Sighișoara', parinte: 'Făgăraș', valoare: '351' }
     ]
   };
 
@@ -132,30 +149,48 @@
   }
 
   async function verificaRezolvare() {
+    // 1. Verificăm mai întâi dacă numărul total de noduri coincide
     if (noduriArbore.length !== problema2.solutiePerfecta.length) {
       exercitiuCorectat = true;
-      mesajRezultat = "❌ Incorect";
+      mesajRezultat = "❌ Incorect (Număr incorect de noduri în arbore)";
       return;
     }
 
     let totulEsteCorect = true;
 
-    for (let sol of problema2.solutiePerfecta) {
-      const nodStudent = noduriArbore.find(n => {
-        if (n.eticheta.toUpperCase() !== sol.nod.toUpperCase()) return false;
-        
-        if (sol.parinte === null) {
-          return n.parinteId === null;
-        } else {
-          if (n.parinteId === null) return false;
-          const p = gasesteNod(n.parinteId);
-          return p && p.eticheta.toUpperCase() === sol.parinte.toUpperCase();
-        }
-      });
+    // 2. Verificăm nod cu nod, exact în ordinea în care au fost introduse
+    for (let i = 0; i < problema2.solutiePerfecta.length; i++) {
+      const sol = problema2.solutiePerfecta[i];
+      const nodStudent = noduriArbore[i]; // Luăm nodul de pe aceeași poziție
 
-      if (!nodStudent || nodStudent.euristica.trim() !== sol.valoare) {
+      // Verificăm eticheta nodului curent
+      if (nodStudent.eticheta.toUpperCase() !== sol.nod.toUpperCase()) {
         totulEsteCorect = false;
         break;
+      }
+
+      // Verificăm valoarea f(n)
+      if (nodStudent.euristica.trim() !== sol.valoare) {
+        totulEsteCorect = false;
+        break;
+      }
+
+      // Verificăm părintele
+      if (sol.parinte === null) {
+        if (nodStudent.parinteId !== null) {
+          totulEsteCorect = false;
+          break;
+        }
+      } else {
+        if (nodStudent.parinteId === null) {
+          totulEsteCorect = false;
+          break;
+        }
+        const p = gasesteNod(nodStudent.parinteId);
+        if (!p || p.eticheta.toUpperCase() !== sol.parinte.toUpperCase()) {
+          totulEsteCorect = false;
+          break;
+        }
       }
     }
 
@@ -164,7 +199,7 @@
       mesajRezultat = "🎉 Excelent!";
       await acordaPuncte(100);
     } else {
-      mesajRezultat = "❌ Incorect";
+      mesajRezultat = "❌ Incorect (Verifică valorile sau ordinea extinderii)";
     }
   }
 

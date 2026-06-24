@@ -20,10 +20,10 @@
     
     solutiePerfecta: [
       { nod: 'S', parinte: null, valoare: '10', limita: '∞' },
-      { nod: 'A', parinte: 'S', valoare: '13', limita: '11' },
+      { nod: 'A', parinte: 'S', valoare: '13', limita: "" },
       { nod: 'B', parinte: 'S', valoare: '11', limita: '12' },
       { nod: 'C', parinte: 'S', valoare: '12', limita: "" },
-      { nod: 'G', parinte: 'A', valoare: '11', limita: '11' },
+      { nod: 'G', parinte: 'A', valoare: '13', limita: '11' },
       { nod: 'C', parinte: 'A', valoare: '13', limita: "" },
       { nod: 'E', parinte: 'G', valoare: '13', limita: "" },
       { nod: 'D', parinte: 'G', valoare: '13', limita: "" },
@@ -46,7 +46,7 @@
   let nodSelectatPentruAdaugare = $state("");
   let valoareCalculataInput = $state("");
   let limitaInput = $state(""); 
-  let idNodEditat = $state<number | null>(null); // Corectat: eliminat spațiul din denumirea variabilei state
+  let idNodEditat = $state<number | null>(null);
 
   function iesireManuala() {
     document.removeEventListener('fullscreenchange', detecteazaIesireFullscreen);
@@ -183,6 +183,36 @@
     return { x, y };
   }
 
+  async function acordaPuncte(puncte: number) {
+    const email = localStorage.getItem("userEmail");
+
+    if (!email) {
+      console.error("❌ Eroare: Nu s-a găsit cheia 'userEmail' în localStorage!");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/api/update-points", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: email,
+          points: puncte
+        })
+      });
+
+      if (!response.ok) {
+        console.error("❌ Serverul a întors o eroare la salvarea punctajului.");
+      } else {
+        console.log("✅ Punctele au fost adăugate cu succes în baza de date.");
+      }
+    } catch (err) {
+      console.error("❌ Eroare de rețea la actualizarea punctelor:", err);
+    }
+  }
+  
   async function verificaRezolvare() {
     if (noduriArbore.length !== problema1.solutiePerfecta.length) {
       exercitiuCorectat = true;
@@ -206,16 +236,7 @@
     exercitiuCorectat = true;
     if (totulEsteCorect) {
       mesajRezultat = "🎉 Excelent!";
-      const email = localStorage.getItem("userEmail");
-      if (email) {
-        try {
-          await fetch("http://localhost:8080/api/update-points", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, points: 100 })
-          });
-        } catch(e){}
-      }
+      await acordaPuncte(100);
     } else {
       mesajRezultat = "❌ Incorect";
     }

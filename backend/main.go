@@ -170,7 +170,7 @@ func updatePointsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	query := "UPDATE users SET points = $1 WHERE email = $2 AND (points < $1 OR points IS NULL)"
+	query := "UPDATE users SET points = COALESCE(points, 0) + $1 WHERE email = $2"
 	_, err = db.Exec(query, req.Points, req.Email)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

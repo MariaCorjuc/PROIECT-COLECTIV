@@ -37,7 +37,7 @@ export const dictionary = {
 		"/dashboard/IDA": [10],
 		"/dashboard/IDA/Problema1": [11],
 		"/dashboard/IDA/Problema2": [12],
-		"/dashboard/MINIMAX": [13],
+		"/dashboard/Minimax": [13],
 		"/dashboard/RecursiveBFS": [14],
 		"/dashboard/RecursiveBFS/problema1": [15],
 		"/dashboard/RecursiveBFS/problema2": [16],

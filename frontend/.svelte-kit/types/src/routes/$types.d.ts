@@ -11,7 +11,7 @@ type EnsureDefined<T> = T extends null | undefined ? {} : T;
 type OptionalUnion<U extends Record<string, any>, A extends keyof U = U extends U ? keyof U : never> = U extends unknown ? { [P in Exclude<A, keyof U>]?: never } & U : never;
 export type Snapshot<T = any> = Kit.Snapshot<T>;
 type PageParentData = EnsureDefined<LayoutData>;
-type LayoutRouteId = RouteId | "/" | "/dashboard" | "/dashboard/A" | "/dashboard/A/problema1" | "/dashboard/A/problema2" | "/dashboard/BFS" | "/dashboard/DFS" | "/dashboard/Expectimax" | "/dashboard/IDA" | "/dashboard/IDA/Problema1" | "/dashboard/IDA/Problema2" | "/dashboard/MINIMAX" | "/dashboard/RecursiveBFS" | "/dashboard/RecursiveBFS/problema1" | "/dashboard/RecursiveBFS/problema2" | "/dashboard/UCS" | "/dashboard/UCS/Problema1" | "/dashboard/UCS/Problema2" | null
+type LayoutRouteId = RouteId | "/" | "/dashboard" | "/dashboard/A" | "/dashboard/A/problema1" | "/dashboard/A/problema2" | "/dashboard/BFS" | "/dashboard/DFS" | "/dashboard/Expectimax" | "/dashboard/IDA" | "/dashboard/IDA/Problema1" | "/dashboard/IDA/Problema2" | "/dashboard/Minimax" | "/dashboard/RecursiveBFS" | "/dashboard/RecursiveBFS/problema1" | "/dashboard/RecursiveBFS/problema2" | "/dashboard/UCS" | "/dashboard/UCS/Problema1" | "/dashboard/UCS/Problema2" | null
 type LayoutParams = RouteParams & {  }
 type LayoutParentData = EnsureDefined<{}>;
 
